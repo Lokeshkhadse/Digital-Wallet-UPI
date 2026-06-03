@@ -16,7 +16,7 @@ public class GlobalException {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Map.of(
                         "status", 404,
-                        "error", "EMAIL_ERROR",
+                        "error", "User is Not in DB",
                         "message", ex.getMessage()
                 ));
     }
