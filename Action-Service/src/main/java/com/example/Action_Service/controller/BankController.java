@@ -7,6 +7,7 @@ import com.example.Action_Service.service.BankService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -19,6 +20,7 @@ public class BankController {
     private final BankService bankService;
 
     @PostMapping("/add-bank-details")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<GenericResponse<BankResponse>> addBankDetails(@Valid  @RequestBody BankRequest bankRequest) {
         BankResponse response = bankService.addBankDetails(bankRequest);
         return ResponseEntity.ok(new GenericResponse<>("Bank details added successfully", response, 200));
