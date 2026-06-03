@@ -25,6 +25,11 @@
             predicates:
               - Path=/query/**
 
+          - id: ledger-service
+            uri: lb://LEDGER-SERVICE
+            predicates:
+              - Path=/ledger/**
+
 #  Eureka
   eureka:
     client:
@@ -33,9 +38,9 @@
     instance:
       prefer-ip-address: true
 
-#  jwt:
-#    secret: mySuperSecretKeyMySuperSecretKey
-#    expiration: 900000
+  jwt:
+    secret: mysecretkeymysecretkeymysecretkey123456
+    expiration: 86400000
 
   management:
     endpoints:
