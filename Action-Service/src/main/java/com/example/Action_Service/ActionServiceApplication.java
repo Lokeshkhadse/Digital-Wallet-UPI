@@ -1,0 +1,19 @@
+package com.example.Action_Service;
+
+import jakarta.persistence.Entity;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+
+@SpringBootApplication
+@EnableFeignClients
+@EnableJpaAuditing
+public class ActionServiceApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(ActionServiceApplication.class, args);
+	}
+
+}
