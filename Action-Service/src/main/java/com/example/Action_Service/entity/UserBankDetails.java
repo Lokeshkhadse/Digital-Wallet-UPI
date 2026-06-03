@@ -20,12 +20,19 @@ public class UserBankDetails {
     private Long id;
 
     private Long userId;
+
     private String bankName;
+
+    @Column(unique = true,nullable = false)
     private String accountNumber;
+
     private String ifscCode;
+
+    @Column(unique = true)
     private String upiId;
 
     @Enumerated(EnumType.STRING)
     private AccountType accountType;
+
     private LocalDateTime createdAt;
 }

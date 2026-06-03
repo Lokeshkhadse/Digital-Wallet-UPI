@@ -5,6 +5,7 @@ import com.example.Action_Service.dto.BankResponse;
 import com.example.Action_Service.dto.UserResponseDto;
 import com.example.Action_Service.entity.UserBankDetails;
 import com.example.Action_Service.exception.BankNotFoundException;
+import com.example.Action_Service.exception.DuplicateResourceException;
 import com.example.Action_Service.exception.UserNotFoundException;
 import com.example.Action_Service.feign.AuthServiceClient;
 import com.example.Action_Service.mapper.BankMapper;
@@ -25,7 +26,7 @@ public class BankService {
 
     public BankResponse addBankDetails(BankRequest bankRequest) {
 
-        try {
+
 
             UserResponseDto user =
                     authServiceClient.getUserById(bankRequest.getUserId());
@@ -36,6 +37,17 @@ public class BankService {
                 );
             }
 
+            // Check duplicates
+            if (bankRepository.existsByAccountNumber(bankRequest.getAccountNumber())) {
+                throw new DuplicateResourceException("Account number already exists");
+            }
+
+            if (bankRequest.getUpiId() != null &&
+                    bankRepository.existsByUpiId(bankRequest.getUpiId())) {
+                throw new DuplicateResourceException("UPI ID already exists");
+            }
+
+
             UserBankDetails userBankDetails =
                     bankMapper.toEntity(bankRequest);
 
@@ -44,22 +56,7 @@ public class BankService {
 
             return bankMapper.toResponse(savedDetails);
 
-        } catch (UserNotFoundException ex) {
 
-            throw ex;
-
-        } catch (FeignException.NotFound ex) {
-
-            throw new UserNotFoundException(
-                    "User with id " + bankRequest.getUserId() + " not found"
-            );
-
-        } catch (FeignException ex) {
-
-            throw new RuntimeException(
-                    "Auth Service is unavailable or returned an error"
-            );
-        }
     }
 
     public String deleteBank(Long bankId) {
