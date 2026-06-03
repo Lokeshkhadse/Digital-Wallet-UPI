@@ -1,6 +1,6 @@
 spring:
   application:
-    name: ledger-service
+    name: LEDGER-SERVICE
 
   datasource:
     url: jdbc:mysql://localhost:3306/digital_wallet
