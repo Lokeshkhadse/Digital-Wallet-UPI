@@ -4,6 +4,7 @@ package com.example.Auth_Service.util;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -31,7 +32,14 @@ public class JwtUtil {
 
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
-                .claim("roles", userDetails.getAuthorities())
+//                .claim("roles", userDetails.getAuthorities())
+                .claim(
+                        "roles",
+                        userDetails.getAuthorities()
+                                .stream()
+                                .map(GrantedAuthority::getAuthority)
+                                .toList()
+                )
                 .setIssuedAt(new Date())
                 .setExpiration(
                         new Date(
