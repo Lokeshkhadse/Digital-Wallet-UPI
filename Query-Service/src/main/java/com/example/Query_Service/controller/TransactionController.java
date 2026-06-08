@@ -7,6 +7,7 @@ import com.example.Query_Service.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -19,7 +20,8 @@ public class TransactionController {
 
     private final TransactionService service;
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/user/{senderUserId}")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public Page<TransferTransactionResponse> getUserTransactions(
 
             @PathVariable Long senderUserId,
@@ -37,13 +39,15 @@ public class TransactionController {
     }
 
     @GetMapping("/getByRefNo/{transactionRefNo}")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public TransferTransactionResponse getByRefNo(
             @PathVariable String transactionRefNo) {
 
         return service.getByRefNo(transactionRefNo);
     }
 
-    @GetMapping("/mini-statement/{userId}")
+    @GetMapping("/mini-statement/{senderUserId}")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public List<TransferTransactionResponse> miniStatement(
             @PathVariable Long senderUserId) {
 
@@ -51,6 +55,7 @@ public class TransactionController {
     }
 
     @GetMapping("/status")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public Page<TransferTransactionResponse> getByStatus(
 
             @RequestParam TransactionStatus status,
@@ -68,6 +73,7 @@ public class TransactionController {
     }
 
     @GetMapping("/type")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public Page<TransferTransactionResponse> getByType(
 
             @RequestParam TransactionType type,
@@ -85,6 +91,7 @@ public class TransactionController {
     }
 
     @GetMapping("/date-range")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public Page<TransferTransactionResponse> getByDateRange(
 
             @RequestParam

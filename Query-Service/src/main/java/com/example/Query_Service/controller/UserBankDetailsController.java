@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class UserBankDetailsController {
     private final UserBankDetailsService service;
 
     @GetMapping("/user/{userId}")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<GenericResponse<List<UserBankDetailsResponse>>> getBanksByUserId(
             @PathVariable Long userId) {
 
@@ -27,7 +29,8 @@ public class UserBankDetailsController {
         return new ResponseEntity<>(new GenericResponse<>("Bank details fetched successfully", banks, 200), HttpStatus.OK);
     }
 
-    @GetMapping("/bank/{bankId}")
+    @GetMapping("/bank/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<GenericResponse<UserBankDetailsResponse>> getBankById(
             @PathVariable Long id) {
 
@@ -36,6 +39,7 @@ public class UserBankDetailsController {
     }
 
     @GetMapping("/search/account-number")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<GenericResponse<UserBankDetailsResponse>> searchByAccountNumber(
             @RequestParam String accountNumber) {
         UserBankDetailsResponse userBankDetailsResponse = service.searchByAccountNumber(accountNumber);
@@ -43,6 +47,7 @@ public class UserBankDetailsController {
     }
 
     @GetMapping("/getAllBanks")
+    @PreAuthorize("hasRole('ADMIN')")
     public Page<UserBankDetailsResponse> getAllBanks(
 
             @RequestParam(defaultValue = "0")
@@ -55,6 +60,7 @@ public class UserBankDetailsController {
     }
 
     @GetMapping("/search/bank-name")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public Page<UserBankDetailsResponse> searchByBankName(
 
             @RequestParam String bankName,
@@ -72,6 +78,7 @@ public class UserBankDetailsController {
     }
 
     @GetMapping("/search/ifsc")
+    @PreAuthorize("hasRole('ADMIN')")
     public Page<UserBankDetailsResponse> searchByIfsc(
 
             @RequestParam String ifsc,
@@ -89,6 +96,7 @@ public class UserBankDetailsController {
     }
 
     @GetMapping("/search/account-type")
+    @PreAuthorize("hasRole('ADMIN')")
     public Page<UserBankDetailsResponse> searchByAccountType(
 
             @RequestParam AccountType accountType,

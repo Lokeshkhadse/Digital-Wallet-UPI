@@ -6,6 +6,7 @@ import com.example.Query_Service.service.WithdrawService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -19,10 +20,11 @@ public class WithdrawController {
 
     private final WithdrawService service;
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/user/{receiverUserId}")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public Page<TransferTransactionResponse> getUserWithdrawals(
 
-            @PathVariable Long userId,
+            @PathVariable Long receiverUserId,
 
             @RequestParam(defaultValue = "0")
             int page,
@@ -31,12 +33,13 @@ public class WithdrawController {
             int size) {
 
         return service.getUserWithdrawals(
-                userId,
+                receiverUserId,
                 page,
                 size);
     }
 
     @GetMapping("/status")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public Page<TransferTransactionResponse> getByStatus(
 
             @RequestParam TransactionStatus status,
@@ -54,6 +57,7 @@ public class WithdrawController {
     }
 
     @GetMapping("/amount")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public Page<TransferTransactionResponse> getByAmount(
 
             @RequestParam BigDecimal min,
@@ -74,6 +78,7 @@ public class WithdrawController {
     }
 
     @GetMapping("/date-range")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public Page<TransferTransactionResponse> getByDate(
 
             @RequestParam
@@ -97,10 +102,11 @@ public class WithdrawController {
                 size);
     }
 
-    @GetMapping("/mini-statement/{userId}")
+    @GetMapping("/mini-statement/{senderUserId}")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public List<TransferTransactionResponse> miniStatement(
-            @PathVariable Long userId) {
+            @PathVariable Long senderUserId) {
 
-        return service.getMiniStatement(userId);
+        return service.getMiniStatement(senderUserId);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.Action_Service.security;
+package com.example.Query_Service.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

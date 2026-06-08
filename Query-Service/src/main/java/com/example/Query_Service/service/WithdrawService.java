@@ -22,7 +22,7 @@ public class WithdrawService {
     private final TransactionMapper mapper;
 
     public Page<TransferTransactionResponse> getUserWithdrawals(
-            Long userId,
+            Long receiverUserId,
             int page,
             int size) {
 
@@ -32,8 +32,8 @@ public class WithdrawService {
 
         return repository
                 .findBySenderUserIdOrReceiverUserId(
-                        userId,
-                        userId,
+                        receiverUserId,
+                        receiverUserId,
                         pageable)
                 .map(mapper::toResponse)
                 .map(tx -> {
@@ -96,12 +96,12 @@ public class WithdrawService {
     }
 
     public List<TransferTransactionResponse> getMiniStatement(
-            Long userId) {
+            Long senderUserId) {
 
         return repository
                 .findTop10ByTransactionTypeAndSenderUserIdOrderByCreatedAtDesc(
                         TransactionType.WITHDRAW,
-                        userId)
+                        senderUserId)
                 .stream()
                 .map(mapper::toResponse)
                 .toList();
