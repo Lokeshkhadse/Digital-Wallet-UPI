@@ -3,10 +3,12 @@ package com.example.Ledger_Service.controller;
 import com.example.Ledger_Service.dto.LedgerRequest;
 import com.example.Ledger_Service.dto.LedgerResponse;
 import com.example.Ledger_Service.service.LedgerService;
+import jakarta.annotation.PreDestroy;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +22,7 @@ public class LedgerController {
     private final LedgerService ledgerService;
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Map<String, Object>> createLedgerEntry(
             @Valid @RequestBody LedgerRequest request) {
 
@@ -36,6 +39,7 @@ public class LedgerController {
 
 
     @GetMapping("/getById/{ledgerId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Map<String, Object>> getLedgerById(@PathVariable Long ledgerId) {
         LedgerResponse response = ledgerService.getLedgerById(ledgerId);
 
@@ -46,6 +50,7 @@ public class LedgerController {
     }
 
     @GetMapping("/getAll")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Map<String, Object>> getAllLedgers() {
         List<LedgerResponse> response = ledgerService.getAllLedgers();
 
