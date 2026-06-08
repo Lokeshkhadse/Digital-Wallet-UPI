@@ -29,6 +29,7 @@ public class BankController {
 
 
     @DeleteMapping("/delete/{bankId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<GenericResponse<String>> deleteBank(
             @PathVariable Long bankId) {
 

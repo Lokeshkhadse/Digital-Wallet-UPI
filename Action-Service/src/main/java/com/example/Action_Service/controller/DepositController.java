@@ -7,6 +7,7 @@ import com.example.Action_Service.service.DepositService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,7 @@ public class DepositController {
     private final DepositService depositService;
 
     @PostMapping("/amount")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<GenericResponse<TransferTransactionResponse>>
     deposit(
             @Valid

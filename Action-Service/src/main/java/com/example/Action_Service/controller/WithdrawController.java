@@ -7,6 +7,7 @@ import com.example.Action_Service.service.WithdrawService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,7 @@ public class WithdrawController {
     private final WithdrawService withdrawService;
 
     @PostMapping("/amount")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<GenericResponse<TransferTransactionResponse>>
     withdraw(
             @Valid

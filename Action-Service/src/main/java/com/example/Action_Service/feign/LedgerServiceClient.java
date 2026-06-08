@@ -7,11 +7,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Map;
 
-//@FeignClient(name="ledger-service", url="http://localhost:8083")
-@FeignClient(name = "LEDGER-SERVICE")
+
+
+@FeignClient(
+        name = "LEDGER-SERVICE",
+        fallback = LedgerServiceFallback.class
+)
 public interface LedgerServiceClient {
 
     @PostMapping("ledger/create")
-    public Map<String, Object> createLedgerEntry(
-            @RequestBody LedgerRequest request);
+    Map<String, Object> createLedgerEntry(@RequestBody LedgerRequest request);
 }

@@ -7,6 +7,7 @@ import com.example.Action_Service.service.UserBankBalanceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -20,6 +21,7 @@ public class UserBankBalanceController {
     private final UserBankBalanceService service;
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<GenericResponse<UserBankBalanceResponse>> createBalance(
             @Valid @RequestBody UserBankBalanceRequest request) {
         UserBankBalanceResponse response = service.createBalance(request);
@@ -30,6 +32,7 @@ public class UserBankBalanceController {
     }
 
     @PatchMapping("/update/{userBankBalanceId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<GenericResponse<UserBankBalanceResponse>> updateBalance(
             @PathVariable Long userBankBalanceId,
             @RequestBody UserBankBalanceRequest request) {
@@ -42,6 +45,7 @@ public class UserBankBalanceController {
     }
 
     @DeleteMapping("/delete/{balanceId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Map<String, Object>> deleteBalance(
             @PathVariable Long userBankBalanceId) {
 
