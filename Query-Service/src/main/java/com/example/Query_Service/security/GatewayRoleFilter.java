@@ -23,8 +23,11 @@ public class GatewayRoleFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        // roles sent from gateway
+        String userHeader = request.getHeader("X-USER");
         String rolesHeader = request.getHeader("X-ROLES");
+
+        System.out.println("User: " + userHeader);
+        System.out.println("Roles: " + rolesHeader);
 
         if (rolesHeader != null && !rolesHeader.isEmpty()) {
 
@@ -35,7 +38,7 @@ public class GatewayRoleFilter extends OncePerRequestFilter {
 
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(
-                            null,   // no user needed
+                            userHeader,
                             null,
                             authorities
                     );
