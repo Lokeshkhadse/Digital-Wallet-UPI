@@ -19,10 +19,10 @@ spring:
       hibernate:
         format_sql: true
 
-  cloud:
-    openfeign:
-      circuitbreaker:
-        enabled: true   # ✅ IMPORTANT for Feign fallback
+#  cloud:
+#    openfeign:
+#      circuitbreaker:
+#        enabled: true   # ✅ IMPORTANT for Feign fallback
 
 # ------------------------
 # EUREKA CONFIG
@@ -37,41 +37,41 @@ eureka:
 # ------------------------
 # RESILIENCE4J CONFIG
 # ------------------------
-resilience4j:
-
-  circuitbreaker:
-    instances:
-
-      AUTH-SERVICE:
-        registerHealthIndicator: true
-        slidingWindowSize: 10
-        failureRateThreshold: 50
-        waitDurationInOpenState: 10s
-        permittedNumberOfCallsInHalfOpenState: 3
-        automaticTransitionFromOpenToHalfOpenEnabled: true
-
-      LEDGER-SERVICE:
-        registerHealthIndicator: true
-        slidingWindowSize: 10
-        failureRateThreshold: 50
-        waitDurationInOpenState: 10s
-        permittedNumberOfCallsInHalfOpenState: 3
-        automaticTransitionFromOpenToHalfOpenEnabled: true
-
-  retry:
-    instances:
-      authRetry:
-        maxAttempts: 2
-        waitDuration: 1s
-
-      ledgerRetry:
-        maxAttempts: 2
-        waitDuration: 1s
-
-# ------------------------
-# LOGGING (OPTIONAL BUT USEFUL)
-# ------------------------
-logging:
-  level:
-    com.example.Action_Service: DEBUG
-    org.springframework.cloud.openfeign: DEBUG
+#resilience4j:
+#
+#  circuitbreaker:
+#    instances:
+#
+#      AUTH-SERVICE:
+#        registerHealthIndicator: true
+#        slidingWindowSize: 10
+#        failureRateThreshold: 50
+#        waitDurationInOpenState: 10s
+#        permittedNumberOfCallsInHalfOpenState: 3
+#        automaticTransitionFromOpenToHalfOpenEnabled: true
+#
+#      LEDGER-SERVICE:
+#        registerHealthIndicator: true
+#        slidingWindowSize: 10
+#        failureRateThreshold: 50
+#        waitDurationInOpenState: 10s
+#        permittedNumberOfCallsInHalfOpenState: 3
+#        automaticTransitionFromOpenToHalfOpenEnabled: true
+#
+#  retry:
+#    instances:
+#      authRetry:
+#        maxAttempts: 2
+#        waitDuration: 1s
+#
+#      ledgerRetry:
+#        maxAttempts: 2
+#        waitDuration: 1s
+#
+## ------------------------
+## LOGGING (OPTIONAL BUT USEFUL)
+## ------------------------
+#logging:
+#  level:
+#    com.example.Action_Service: DEBUG
+#    org.springframework.cloud.openfeign: DEBUG

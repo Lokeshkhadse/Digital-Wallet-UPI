@@ -1,9 +1,11 @@
 package com.example.Action_Service.exception;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @RestControllerAdvice
@@ -90,6 +92,68 @@ public class GlobalException {
                         "timestamp", java.time.LocalDateTime.now(),
                         "status", 400,
                         "error", "Validation Error",
+                        "message", ex.getMessage()
+                ));
+    }
+
+
+    @ExceptionHandler(AuthServiceUnavailableException.class)
+    public ResponseEntity<Map<String, Object>> handleAuthDown(AuthServiceUnavailableException ex) {
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(Map.of(
+                        "timestamp", java.time.LocalDateTime.now(),
+                        "status", 503,
+                        "error", "Auth Service Unavailable",
+                        "message", ex.getMessage()
+                ));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Map<String, Object>> handleGeneric(Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of(
+                        "timestamp", java.time.LocalDateTime.now(),
+                        "status", 500,
+                        "error", "Internal Server Error",
+                        "message", ex.getMessage()
+                ));
+    }
+
+    @ExceptionHandler(LedgerServiceUnavailableException.class)
+    public ResponseEntity<Map<String, Object>> handleLedgerDown(
+            LedgerServiceUnavailableException ex) {
+
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(Map.of(
+                        "timestamp", LocalDateTime.now(),
+                        "status", 503,
+                        "error", "Ledger Service Unavailable",
+                        "message", ex.getMessage()
+                ));
+    }
+
+    @ExceptionHandler(InvalidBankOwnerException.class)
+    public ResponseEntity<Map<String, Object>> InvalidBankOwnerException(
+            InvalidBankOwnerException ex) {
+
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(Map.of(
+                        "timestamp", LocalDateTime.now(),
+                        "status", 503,
+                        "error", "Invalid Bank Owner",
+                        "message", ex.getMessage()
+                ));
+    }
+
+    @ExceptionHandler(InvalidAmountException.class)
+    public ResponseEntity<Map<String, Object>> InvalidAmountException(
+            InvalidAmountException ex) {
+
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(Map.of(
+                        "timestamp", LocalDateTime.now(),
+                        "status", 503,
+                        "error", "Invalid Amount ,check the Amount",
                         "message", ex.getMessage()
                 ));
     }

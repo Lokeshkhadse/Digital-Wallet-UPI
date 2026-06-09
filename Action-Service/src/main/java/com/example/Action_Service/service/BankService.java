@@ -4,6 +4,7 @@ import com.example.Action_Service.dto.BankRequest;
 import com.example.Action_Service.dto.BankResponse;
 import com.example.Action_Service.dto.UserResponseDto;
 import com.example.Action_Service.entity.UserBankDetails;
+import com.example.Action_Service.exception.AuthServiceUnavailableException;
 import com.example.Action_Service.exception.BankNotFoundException;
 import com.example.Action_Service.exception.DuplicateResourceException;
 import com.example.Action_Service.exception.UserNotFoundException;
@@ -26,35 +27,38 @@ public class BankService {
 
     public BankResponse addBankDetails(BankRequest bankRequest) {
 
+        UserResponseDto user;
 
+        try{
+            user = authServiceClient.getUserById(bankRequest.getUserId());
+        }catch (AuthServiceUnavailableException ex){
+            throw  ex;
+        }
 
-            UserResponseDto user =
-                    authServiceClient.getUserById(bankRequest.getUserId());
-
-            if (user == null) {
-                throw new UserNotFoundException(
-                        "User with id " + bankRequest.getUserId() + " not found"
-                );
-            }
+        if (user == null) {
+            throw new UserNotFoundException(
+                    "User with id " + bankRequest.getUserId() + " not found"
+            );
+        }
 
             // Check duplicates
-            if (bankRepository.existsByAccountNumber(bankRequest.getAccountNumber())) {
+        if (bankRepository.existsByAccountNumber(bankRequest.getAccountNumber())) {
                 throw new DuplicateResourceException("Account number already exists");
-            }
+        }
 
-            if (bankRequest.getUpiId() != null &&
+        if (bankRequest.getUpiId() != null &&
                     bankRepository.existsByUpiId(bankRequest.getUpiId())) {
                 throw new DuplicateResourceException("UPI ID already exists");
-            }
+        }
 
 
-            UserBankDetails userBankDetails =
+        UserBankDetails userBankDetails =
                     bankMapper.toEntity(bankRequest);
 
-            UserBankDetails savedDetails =
+        UserBankDetails savedDetails =
                     bankRepository.save(userBankDetails);
 
-            return bankMapper.toResponse(savedDetails);
+        return bankMapper.toResponse(savedDetails);
 
 
     }

@@ -1,19 +1,20 @@
-package com.example.Action_Service.security;
+    package com.example.Action_Service.security;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+    import jakarta.servlet.FilterChain;
+    import jakarta.servlet.ServletException;
+    import jakarta.servlet.http.HttpServletRequest;
+    import jakarta.servlet.http.HttpServletResponse;
+    import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+    import org.springframework.security.core.GrantedAuthority;
+    import org.springframework.security.core.context.SecurityContextHolder;
+    import org.springframework.stereotype.Component;
+    import org.springframework.web.filter.OncePerRequestFilter;
+    import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
+    import java.io.IOException;
+    import java.util.Arrays;
+    import java.util.List;
+
 
 @Component
 public class GatewayRoleFilter extends OncePerRequestFilter {
@@ -24,8 +25,11 @@ public class GatewayRoleFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        // roles sent from gateway
+        String userHeader = request.getHeader("X-USER");
         String rolesHeader = request.getHeader("X-ROLES");
+
+        System.out.println("User: " + userHeader);
+        System.out.println("Roles: " + rolesHeader);
 
         if (rolesHeader != null && !rolesHeader.isEmpty()) {
 
@@ -36,7 +40,7 @@ public class GatewayRoleFilter extends OncePerRequestFilter {
 
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(
-                            null,   // no user needed
+                            userHeader,
                             null,
                             authorities
                     );
