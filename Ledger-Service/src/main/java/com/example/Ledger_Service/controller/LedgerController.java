@@ -22,7 +22,7 @@ public class LedgerController {
     private final LedgerService ledgerService;
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<Map<String, Object>> createLedgerEntry(
             @Valid @RequestBody LedgerRequest request) {
 

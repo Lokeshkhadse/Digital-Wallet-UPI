@@ -13,6 +13,40 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+//
+//@Component
+//public class GatewayRoleFilter extends OncePerRequestFilter {
+//
+//    @Override
+//    protected void doFilterInternal(HttpServletRequest request,
+//                                    HttpServletResponse response,
+//                                    FilterChain filterChain)
+//            throws ServletException, IOException {
+//
+//        // roles sent from gateway
+//        String rolesHeader = request.getHeader("X-ROLES");
+//
+//        if (rolesHeader != null && !rolesHeader.isEmpty()) {
+//
+//            List<SimpleGrantedAuthority> authorities =
+//                    Arrays.stream(rolesHeader.split(","))
+//                            .map(SimpleGrantedAuthority::new)
+//                            .toList();
+//
+//            UsernamePasswordAuthenticationToken authentication =
+//                    new UsernamePasswordAuthenticationToken(
+//                            null,   // no user needed
+//                            null,
+//                            authorities
+//                    );
+//
+//            SecurityContextHolder.getContext()
+//                    .setAuthentication(authentication);
+//        }
+//
+//        filterChain.doFilter(request, response);
+//    }
+//}
 
 @Component
 public class GatewayRoleFilter extends OncePerRequestFilter {
@@ -23,8 +57,11 @@ public class GatewayRoleFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        // roles sent from gateway
+        String userHeader = request.getHeader("X-USER");
         String rolesHeader = request.getHeader("X-ROLES");
+
+        System.out.println("Ledger Service User: " + userHeader);
+        System.out.println("Ledger Service Roles: " + rolesHeader);
 
         if (rolesHeader != null && !rolesHeader.isEmpty()) {
 
@@ -33,9 +70,10 @@ public class GatewayRoleFilter extends OncePerRequestFilter {
                             .map(SimpleGrantedAuthority::new)
                             .toList();
 
+            // Set the user as principal so we can use it in SecurityContext
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(
-                            null,   // no user needed
+                            userHeader,  // principal
                             null,
                             authorities
                     );
