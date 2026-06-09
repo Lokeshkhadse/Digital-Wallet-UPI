@@ -60,17 +60,6 @@ spring:
   cloud:
     gateway:
 
-      default-filters:
-        - name: Retry
-          args:
-            retries: 2
-            statuses:
-              - BAD_GATEWAY
-              - SERVICE_UNAVAILABLE
-              - GATEWAY_TIMEOUT
-            methods:
-              - GET,POST,PATCH,PUT,DELETE
-
       routes:
 
         - id: auth-service
@@ -137,20 +126,24 @@ resilience4j:
 
       authCircuitBreaker:
         slidingWindowSize: 10
+        minimumNumberOfCalls: 5
         failureRateThreshold: 50
         waitDurationInOpenState: 10s
 
       actionCircuitBreaker:
         slidingWindowSize: 10
+        minimumNumberOfCalls: 5
         failureRateThreshold: 50
         waitDurationInOpenState: 10s
 
       queryCircuitBreaker:
         slidingWindowSize: 10
+        minimumNumberOfCalls: 5
         failureRateThreshold: 50
         waitDurationInOpenState: 10s
 
       ledgerCircuitBreaker:
         slidingWindowSize: 10
+        minimumNumberOfCalls: 5
         failureRateThreshold: 50
         waitDurationInOpenState: 10s
