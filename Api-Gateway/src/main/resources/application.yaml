@@ -1,149 +1,179 @@
+
+  server:
+    port: 8085
+
+  spring:
+    application:
+      name: API-GATEWAY
+
+    cloud:
+      gateway:
+        routes:
+
+          - id: auth-service
+            uri: lb://AUTH-SERVICE
+            predicates:
+              - Path=/auth/**
+
+          - id: action-service
+            uri: lb://ACTION-SERVICE
+            predicates:
+              - Path=/action/**
+
+          - id: query-service
+            uri: lb://QUERY-SERVICE
+            predicates:
+              - Path=/query/**
+
+          - id: ledger-service
+            uri: lb://LEDGER-SERVICE
+            predicates:
+              - Path=/ledger/**
+
+#  Eureka
+  eureka:
+    client:
+      service-url:
+        defaultZone: http://localhost:8761/eureka/
+    instance:
+      prefer-ip-address: true
+
+  jwt:
+    secret: mysecretkeymysecretkeymysecretkey123456
+    expiration: 86400000
+
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: "*"
+
+
+
+#server:
+#  port: 8085
 #
-#  server:
-#    port: 8085
+#spring:
+#  application:
+#    name: API-GATEWAY
 #
-#  spring:
-#    application:
-#      name: API-GATEWAY
+#  cloud:
+#    gateway:
 #
-#    cloud:
-#      gateway:
-#        routes:
+#      # These tell the API Gateway how long to wait when calling your services.
+##      httpclient:
+##
+##        # connect-timeout: how long the gateway waits to "reach the service" (open a connection)
+##        # If the service is down or not reachable, it will stop trying after 5 seconds.
+##        connect-timeout: 5000        # 5000 milliseconds = 5 seconds
+##
+##        # response-timeout: how long the gateway waits for the first response from the service
+##        # Even if the connection is established, if the service takes too long, the gateway gives up after 10 seconds.
+##        response-timeout: 10s        # 10 seconds
 #
-#          - id: auth-service
-#            uri: lb://AUTH-SERVICE
-#            predicates:
-#              - Path=/auth/**
+#      routes:
 #
-#          - id: action-service
-#            uri: lb://ACTION-SERVICE
-#            predicates:
-#              - Path=/action/**
+#        - id: auth-service
+#          uri: lb://AUTH-SERVICE
+#          predicates:
+#            - Path=/auth/**
+##          filters:
+##            - name: CircuitBreaker
+##              args:
+##                name: authCircuitBreaker
+##                fallbackUri: forward:/fallback/auth
 #
-#          - id: query-service
-#            uri: lb://QUERY-SERVICE
-#            predicates:
-#              - Path=/query/**
+#        - id: action-service
+#          uri: lb://ACTION-SERVICE
+#          predicates:
+#            - Path=/action/**
+##          filters:
+##            - name: CircuitBreaker
+##              args:
+##                name: actionCircuitBreaker
+##                fallbackUri: forward:/fallback/action
 #
-#          - id: ledger-service
-#            uri: lb://LEDGER-SERVICE
-#            predicates:
-#              - Path=/ledger/**
+#        - id: query-service
+#          uri: lb://QUERY-SERVICE
+#          predicates:
+#            - Path=/query/**
+##          filters:
+##            - name: CircuitBreaker
+##              args:
+##                name: queryCircuitBreaker
+##                fallbackUri: forward:/fallback/query
 #
-##  Eureka
-#  eureka:
-#    client:
-#      service-url:
-#        defaultZone: http://localhost:8761/eureka/
-#    instance:
-#      prefer-ip-address: true
+#        - id: ledger-service
+#          uri: lb://LEDGER-SERVICE
+#          predicates:
+#            - Path=/ledger/**
+##          filters:
+##            - name: CircuitBreaker
+##              args:
+##                name: ledgerCircuitBreaker
+##                fallbackUri: forward:/fallback/ledger
 #
-#  jwt:
-#    secret: mysecretkeymysecretkeymysecretkey123456
-#    expiration: 86400000
 #
-#  management:
-#    endpoints:
-#      web:
-#        exposure:
-#          include: "*"
+##      default-filters:
+##        - name: Retry
+##          args:
+##            retries: 2
+##            statuses:
+##              - BAD_GATEWAY
+##              - SERVICE_UNAVAILABLE
+##              - GATEWAY_TIMEOUT
+##            methods:
+##              - GET
 #
-
-
-server:
-  port: 8085
-
-spring:
-  application:
-    name: API-GATEWAY
-
-  cloud:
-    gateway:
-
-      routes:
-
-        - id: auth-service
-          uri: lb://AUTH-SERVICE
-          predicates:
-            - Path=/auth/**
-          filters:
-            - name: CircuitBreaker
-              args:
-                name: authCircuitBreaker
-                fallbackUri: forward:/fallback/auth
-
-        - id: action-service
-          uri: lb://ACTION-SERVICE
-          predicates:
-            - Path=/action/**
-          filters:
-            - name: CircuitBreaker
-              args:
-                name: actionCircuitBreaker
-                fallbackUri: forward:/fallback/action
-
-        - id: query-service
-          uri: lb://QUERY-SERVICE
-          predicates:
-            - Path=/query/**
-          filters:
-            - name: CircuitBreaker
-              args:
-                name: queryCircuitBreaker
-                fallbackUri: forward:/fallback/query
-
-        - id: ledger-service
-          uri: lb://LEDGER-SERVICE
-          predicates:
-            - Path=/ledger/**
-          filters:
-            - name: CircuitBreaker
-              args:
-                name: ledgerCircuitBreaker
-                fallbackUri: forward:/fallback/ledger
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka/
-
-  instance:
-    prefer-ip-address: true
-
-jwt:
-  secret: mysecretkeymysecretkeymysecretkey123456
-  expiration: 86400000
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-
-resilience4j:
-  circuitbreaker:
-    instances:
-
-      authCircuitBreaker:
-        slidingWindowSize: 10
-        minimumNumberOfCalls: 5
-        failureRateThreshold: 50
-        waitDurationInOpenState: 10s
-
-      actionCircuitBreaker:
-        slidingWindowSize: 10
-        minimumNumberOfCalls: 5
-        failureRateThreshold: 50
-        waitDurationInOpenState: 10s
-
-      queryCircuitBreaker:
-        slidingWindowSize: 10
-        minimumNumberOfCalls: 5
-        failureRateThreshold: 50
-        waitDurationInOpenState: 10s
-
-      ledgerCircuitBreaker:
-        slidingWindowSize: 10
-        minimumNumberOfCalls: 5
-        failureRateThreshold: 50
-        waitDurationInOpenState: 10s
+#
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka/
+#
+#  instance:
+#    prefer-ip-address: true
+#
+#jwt:
+#  secret: mysecretkeymysecretkeymysecretkey123456
+#  expiration: 86400000
+#
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"
+#
+##resilience4j:
+##  circuitbreaker:
+##    instances:
+##
+##      authCircuitBreaker:
+##        slidingWindowSize: 10
+##        minimumNumberOfCalls: 5
+##        failureRateThreshold: 50
+##        waitDurationInOpenState: 10s
+##
+##      actionCircuitBreaker:
+##        slidingWindowSize: 10
+##        minimumNumberOfCalls: 5
+##        failureRateThreshold: 50
+##        waitDurationInOpenState: 10s
+##
+##      queryCircuitBreaker:
+##        slidingWindowSize: 10
+##        minimumNumberOfCalls: 5
+##        failureRateThreshold: 50
+##        waitDurationInOpenState: 10s
+##
+##      ledgerCircuitBreaker:
+##        slidingWindowSize: 10
+##        minimumNumberOfCalls: 5
+##        failureRateThreshold: 50
+##        waitDurationInOpenState: 10s
+#
+##logging:
+##  level:
+##    org.springframework.cloud.gateway: DEBUG
+##    org.springframework.cloud.loadbalancer: DEBUG
+##    com.netflix.discovery: DEBUG
