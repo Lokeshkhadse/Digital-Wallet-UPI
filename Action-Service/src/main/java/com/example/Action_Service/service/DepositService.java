@@ -1,6 +1,7 @@
 package com.example.Action_Service.service;
 
 import com.example.Action_Service.dto.DepositRequest;
+import com.example.Action_Service.dto.EmailRequest;
 import com.example.Action_Service.dto.TransferTransactionResponse;
 import com.example.Action_Service.dto.UserResponseDto;
 import com.example.Action_Service.entity.Transaction;
@@ -21,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +34,7 @@ public class DepositService {
     private final TransactionRepository transactionRepository;
     private final AuthServiceClient authClient;
     private final TransactionMapper transactionMapper;
+    private final EmailService emailService;
 
 
     public TransferTransactionResponse deposit(
@@ -93,6 +96,24 @@ public class DepositService {
                         refNo);
 
         transactionRepository.save(transaction);
+
+        //email part
+//        emailService.sendHtmlEmail(
+//                EmailRequest.builder()
+//                        .to(user.getEmail())
+//                        .subject("Deposit Successful - Account Credited")
+//                        .templateName("transaction-mail")
+//                        .variables(
+//                                Map.of(
+//                                        "name", user.getName(),
+//                                        "amount", request.getAmount(),
+//                                        "referenceNo", refNo,
+//                                        "balance", balance.getAvailableBalance(),
+//                                        "type","Deposit"
+//                                )
+//                        )
+//                        .build()
+//        );
 
         return transactionMapper.toResponse(
                 transaction,

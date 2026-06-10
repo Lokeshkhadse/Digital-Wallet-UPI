@@ -1,0 +1,26 @@
+<p>
+    Dear <b th:text="${name}"></b>,
+</p>
+
+<p class="success">
+    Fund Transfer Successful
+</p>
+
+<table>
+
+    <tr>
+        <td class="label">Amount Transferred</td>
+        <td th:text="${amount}"></td>
+    </tr>
+
+    <tr>
+        <td class="label">Reference Number</td>
+        <td th:text="${referenceNo}"></td>
+    </tr>
+
+    <tr>
+        <td class="label">Status</td>
+        <td>SUCCESS</td>
+    </tr>
+
+</table>

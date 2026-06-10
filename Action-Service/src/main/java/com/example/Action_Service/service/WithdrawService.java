@@ -1,5 +1,6 @@
 package com.example.Action_Service.service;
 
+import com.example.Action_Service.dto.EmailRequest;
 import com.example.Action_Service.dto.TransferTransactionResponse;
 import com.example.Action_Service.dto.UserResponseDto;
 import com.example.Action_Service.dto.WithdrawRequest;
@@ -19,6 +20,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -29,6 +32,8 @@ public class WithdrawService {
     private final TransactionRepository transactionRepository;
     private final AuthServiceClient authClient;
     private final TransactionMapper transactionMapper;
+    private final EmailService emailService;
+
 
     public TransferTransactionResponse withdraw(
             WithdrawRequest request) {
@@ -96,7 +101,25 @@ public class WithdrawService {
         Transaction savedTransaction =
                 transactionRepository.save(transaction);
 
-        // 8. Response
+//        //8. email part
+//        emailService.sendHtmlEmail(
+//                EmailRequest.builder()
+//                        .to(user.getEmail())
+//                        .subject("Withdrawal Successful - Account Debited")
+//                        .templateName("transaction-mail")
+//                        .variables(
+//                                Map.of(
+//                                        "name", user.getName(),
+//                                        "amount", request.getAmount(),
+//                                        "referenceNo", refNo,
+//                                        "balance", balance.getAvailableBalance(),
+//                                        "type","Withdrawal"
+//                                )
+//                        )
+//                        .build()
+//        );
+
+        // 9. Response
         return transactionMapper.toResponse(
                 savedTransaction,
                 "Withdraw successful");

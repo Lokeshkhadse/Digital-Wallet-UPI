@@ -1,0 +1,27 @@
+<p xmlns:th="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml"
+   xmlns:th="http://www.w3.org/1999/xhtml">
+    Dear <b th:text="${name}"></b>,
+</p>
+
+<p class="success">
+    Funds Received Successfully
+</p>
+
+<table>
+
+    <tr>
+        <td class="label">Amount Received</td>
+        <td th:text="${amount}"></td>
+    </tr>
+
+    <tr>
+        <td class="label">Reference Number</td>
+        <td th:text="${referenceNo}"></td>
+    </tr>
+
+    <tr>
+        <td class="label">Status</td>
+        <td>SUCCESS</td>
+    </tr>
+
+</table>

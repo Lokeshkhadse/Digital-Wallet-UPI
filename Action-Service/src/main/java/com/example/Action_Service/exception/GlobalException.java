@@ -136,7 +136,7 @@ public class GlobalException {
     public ResponseEntity<Map<String, Object>> InvalidBankOwnerException(
             InvalidBankOwnerException ex) {
 
-        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(Map.of(
                         "timestamp", LocalDateTime.now(),
                         "status", 503,
@@ -149,7 +149,7 @@ public class GlobalException {
     public ResponseEntity<Map<String, Object>> InvalidAmountException(
             InvalidAmountException ex) {
 
-        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(Map.of(
                         "timestamp", LocalDateTime.now(),
                         "status", 503,
