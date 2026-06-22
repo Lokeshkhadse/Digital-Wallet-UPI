@@ -1,0 +1,31 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: QUERY-SERVICE
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/digital_wallet
+    username: root
+    password: root
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+#  redis:
+#    host: localhost
+#    port: 6379
+#
+#  cache:
+#    type: redis
+
+#  Eureka
+#  eureka:
+#    client:
+#      service-url:
+#        defaultZone: http://localhost:8761/eureka/
+#    instance:
+#      prefer-ip-address: true

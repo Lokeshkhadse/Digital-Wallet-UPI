@@ -1,0 +1,101 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: ACTION-SERVICE
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/digital_wallet
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: lokeshkhadse.eidiko@gmail.com
+    password: qptq ldun zlhl kupy
+
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  task:
+    scheduling:
+      pool:
+        size: 5
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+#  cloud:
+#    openfeign:
+#      circuitbreaker:
+#        enabled: true   # ✅ IMPORTANT for Feign fallback
+
+# ------------------------
+# EUREKA CONFIG
+# ------------------------
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka/
+#  instance:
+#    prefer-ip-address: true
+
+# ------------------------
+# RESILIENCE4J CONFIG
+# ------------------------
+#resilience4j:
+#
+#  circuitbreaker:
+#    instances:
+#
+#      AUTH-SERVICE:
+#        registerHealthIndicator: true
+#        slidingWindowSize: 10
+#        failureRateThreshold: 50
+#        waitDurationInOpenState: 10s
+#        permittedNumberOfCallsInHalfOpenState: 3
+#        automaticTransitionFromOpenToHalfOpenEnabled: true
+#
+#      LEDGER-SERVICE:
+#        registerHealthIndicator: true
+#        slidingWindowSize: 10
+#        failureRateThreshold: 50
+#        waitDurationInOpenState: 10s
+#        permittedNumberOfCallsInHalfOpenState: 3
+#        automaticTransitionFromOpenToHalfOpenEnabled: true
+#
+#  retry:
+#    instances:
+#      authRetry:
+#        maxAttempts: 2
+#        waitDuration: 1s
+#
+#      ledgerRetry:
+#        maxAttempts: 2
+#        waitDuration: 1s
+#
+## ------------------------
+## LOGGING (OPTIONAL BUT USEFUL)
+## ------------------------
+#logging:
+#  level:
+#    com.example.Action_Service: DEBUG
+#    org.springframework.cloud.openfeign: DEBUG

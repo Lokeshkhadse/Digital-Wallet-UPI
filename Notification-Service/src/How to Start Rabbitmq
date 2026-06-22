@@ -1,0 +1,30 @@
+📝 RabbitMQ Cheat Sheet (Future Use के लिए)
+
+:: [स्टेप 1] - सबसे पहले CMD को "Run as Administrator" करके खोलें।
+
+:: [स्टेप 2] - RabbitMQ के फोल्डर के अंदर जाएं
+cd "C:\Program Files\RabbitMQ Server\rabbitmq_server-4.1.0\sbin"
+
+:: [स्टेप 3] - विंडोज बैकग्राउंड सर्विस को स्टार्ट करें
+rabbitmq-service start
+
+:: [स्टेप 4] - वेब डैशबोर्ड (UI) प्लगइन को इनेबल करें
+rabbitmq-plugins enable rabbitmq_management
+
+:: [स्टेप 5] - रैबिटएमक्यू की मुख्य एप्लीकेशन को चालू करें
+rabbitmqctl start_app
+
+:: [स्टेप 6] - चेक करें कि सब सही से चालू हुआ या नहीं
+rabbitmqctl status
+
+:: [स्टेप 7] - अब ब्राउज़र में जाकर यह लिंक खोलें: http://localhost:15672
+:: लॉगिन के लिए डालें -> Username: guest | Password: guest
+
+
+
+भविष्य में अगर कभी सर्विस अटक जाती है, तो आप ऊपर दिए गए स्टेप 2 में जाकर यह तीन जादुई कमांड्स एक
+साथ चला सकते हैं जो सब कुछ रीसेट और क्लीन कर देंगी:
+
+rabbitmqctl stop_app
+rabbitmqctl reset
+rabbitmqctl start_app
