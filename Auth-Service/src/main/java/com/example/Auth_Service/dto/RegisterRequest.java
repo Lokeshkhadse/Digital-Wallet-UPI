@@ -22,9 +22,13 @@ public class RegisterRequest {
     private Set<String> roles;
 
     @NotBlank(message = "Date of Birth is required")
+//    @Pattern(
+//            regexp = "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$",
+//            message = "Date of Birth must be in YYYY-MM-DD format"
+//    )
     @Pattern(
-            regexp = "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$",
-            message = "Date of Birth must be in YYYY-MM-DD format"
+            regexp = "^(0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-\\d{4}$",
+            message = "Date of Birth must be in DD-MM-YYYY format"
     )
     private String dob;
 }
