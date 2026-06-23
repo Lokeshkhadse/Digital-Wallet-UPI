@@ -46,6 +46,14 @@
 			<version>${commons-text.version}</version>
 		</dependency>
 
+<!--		convert spoken audio into text entirely offline-->
+		<dependency>
+			<groupId>com.alphacephei</groupId>
+			<artifactId>vosk</artifactId>
+			<version>0.3.45</version>
+		</dependency>
+
+
 		<!-- JPA -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

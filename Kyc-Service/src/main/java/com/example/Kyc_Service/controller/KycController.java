@@ -134,4 +134,44 @@ public class KycController {
                 )
         );
     }
+
+
+
+    @PostMapping("/voice/upload")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public ResponseEntity<GenericResponse<VoiceVerificationResponseDto>> uploadVoice(
+            @RequestParam Long userId,
+            @RequestParam MultipartFile file) {
+
+        VoiceVerificationResponseDto response =
+                kycService.uploadVoice(
+                        userId,
+                        file);
+
+        return ResponseEntity.ok(
+                new GenericResponse<>(
+                        "Voice Uploaded Successfully",
+                        response,
+                        200
+                )
+        );
+    }
+
+    @PostMapping("/voice/verify/{userId}")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public ResponseEntity<GenericResponse<VoiceVerificationResultDto>> verifyVoice(
+            @PathVariable Long userId) {
+
+        VoiceVerificationResultDto result =
+                kycService.verifyVoice(
+                        userId);
+
+        return ResponseEntity.ok(
+                new GenericResponse<>(
+                        "Voice Verification Result",
+                        result,
+                        200
+                )
+        );
+    }
 }
