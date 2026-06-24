@@ -1,0 +1,285 @@
+1. Authentication Service:-
+
+Features
+User Registration
+User Login
+JWT Token Generation
+JWT Validation
+Spring Security
+Role Based Authorization
+Roles
+ADMIN
+USER
+APIs
+Register User
+Login User
+Get User By Id
+Get All Users
+Update User
+Delete User
+
+2. Bank Management Service:-
+Features
+User bank accounts manage kar sakta hai.
+APIs
+Add Bank Account
+Delete Bank Account
+Get Bank Details
+Get Bank By User
+Validations
+Duplicate Account Number Check
+Duplicate UPI ID Check
+User Existence Check
+
+3. User Bank Balance Service:-
+Features
+
+Har bank account ka separate balance maintain.
+
+APIs
+Create Balance
+Update Balance
+Delete Balance
+Get Balance
+Important
+1 User
+ ├── HDFC Balance
+ ├── SBI Balance
+ └── ICICI Balance
+
+Separate balance per bank account.
+
+4. Deposit Module:-
+Service
+DepositService
+Features
+Money Deposit
+Balance Increase
+Transaction Entry Creation
+Email Notification
+Status
+
+✅ Complete
+
+5. Withdraw Module:-
+Service
+WithdrawService
+Features
+Withdraw Amount
+Balance Deduction
+Transaction Entry
+Email Notification
+Insufficient Balance Check
+Status
+
+✅ Complete
+
+6. Fund Transfer Module:-
+Service
+TransferService
+Features
+Bank To Bank Transfer
+Sender Validation
+Receiver Validation
+Balance Validation
+Transaction Creation
+Ledger Creation
+Email Notifications
+Status
+
+✅ Complete
+
+7. Idempotency Protection:-
+Feature
+
+Duplicate transfer avoid.
+
+Example
+
+Same request 2 times hit:
+
+Transfer #1
+SUCCESS
+
+Transfer #2
+REJECTED
+Status
+
+✅ Complete
+
+8. Ledger Module:-
+Features
+
+Every money movement stored.
+
+Entries
+DEBIT
+CREDIT
+Example
+Transfer 1000
+
+Sender
+DEBIT 1000
+
+Receiver
+CREDIT 1000
+Status
+
+✅ Complete
+
+9. Email Notification Module:-
+Features
+
+HTML Emails.
+
+Templates
+Account Created
+Deposit Success
+Withdraw Success
+Transfer Sender
+Transfer Receiver
+Status
+
+✅ Complete
+
+10. Beneficiary Management:-
+Features
+
+Save trusted receivers.
+
+APIs
+Add Beneficiary
+Delete Beneficiary
+Get Beneficiaries
+Validation
+No Duplicate Beneficiary
+No Self Beneficiary
+Status
+
+✅ Complete
+
+(Currently transfer validation commented but module ready)
+
+11. UPI PIN Module:-
+Features
+
+Per Bank Account UPI PIN
+
+APIs
+Create PIN
+Change PIN
+Validate PIN
+Flow
+Transfer
+↓
+Enter UPI PIN
+↓
+Validate
+↓
+Transfer Success
+Status
+
+✅ Complete
+
+12. Transaction Query Module:-
+Query Service
+APIs
+Get Transaction By Ref No
+Get Transactions By User
+Mini Statement
+By Type
+By Status
+By Date Range
+Status
+
+✅ Complete
+
+13. PDF Statement Download:-
+Features
+
+Transaction report PDF
+
+Supported
+Transfer PDF
+Deposit PDF
+Withdraw PDF
+Dynamic Title Support
+Transfer Report
+Deposit Report
+Withdraw Report
+Status
+
+✅ Complete
+
+14. Dashboard APIs:-
+Features
+
+Per User Dashboard
+
+Metrics
+Total Balance
+Total Accounts
+Total Transfers
+Total Deposits
+Total Withdrawals
+Recent Transactions
+Multiple Bank Accounts Supported
+Status
+
+✅ Complete
+
+15. Daily Transfer Limit:-
+Features
+
+Per Bank Account
+
+₹3,00,000/day
+Example
+HDFC
+Limit = 3 Lakh
+
+SBI
+Limit = 3 Lakh
+
+Independent limits.
+
+Status
+
+✅ Complete
+
+16. Global Exception Handling:-
+Features
+
+Centralized error handling.
+
+Exceptions
+UserNotFoundException
+BankNotFoundException
+ValidationException
+DuplicateResourceException
+InvalidAmountException
+InvalidBankOwnerException
+DailyLimitExceededException
+LedgerServiceUnavailableException
+AuthServiceUnavailableException
+Status
+
+✅ Complete
+
+17. schedular payment
+Schedule a payment (one time, monthly, weekly)
+✅ Complete
+
+18 . QR 
+when bank details add then in QR table details also add
+✅ Complete
+
+19. Split bill compeleted (action and query service)
+✅ Complete
+
+
+20. Outbox pattern 
+ ✅ Complete
+
+21. Kyc service
+start kyc -> uplaod pan -uplaod addhar -> verfiyckyc -> upload voice -> verfidy voice -> final status of kyc
