@@ -1,3 +1,36 @@
+#server:
+#  port: 8084
+#
+#spring:
+#  application:
+#    name: QUERY-SERVICE
+#
+#  datasource:
+#    url: jdbc:mysql://localhost:3306/digital_wallet
+#    username: root
+#    password: root
+#
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    show-sql: true
+#
+##  redis:
+##    host: localhost
+##    port: 6379
+##
+##  cache:
+##    type: redis
+#
+##  Eureka
+##  eureka:
+##    client:
+##      service-url:
+##        defaultZone: http://localhost:8761/eureka/
+##    instance:
+##      prefer-ip-address: true
+
+
 server:
   port: 8084
 
@@ -9,23 +42,40 @@ spring:
     url: jdbc:mysql://localhost:3306/digital_wallet
     username: root
     password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+    hikari:
+
+      pool-name: QueryServicePool
+
+      minimum-idle: 5
+
+      maximum-pool-size: 20
+
+      idle-timeout: 300000
+
+      max-lifetime: 1800000
+
+      connection-timeout: 30000
+
+      validation-timeout: 5000
+
+      leak-detection-threshold: 10000
+
+      auto-commit: true
 
   jpa:
     hibernate:
       ddl-auto: update
+
     show-sql: true
 
-#  redis:
-#    host: localhost
-#    port: 6379
+    properties:
+      hibernate:
+        format_sql: true
 #
-#  cache:
-#    type: redis
-
-#  Eureka
-#  eureka:
-#    client:
-#      service-url:
-#        defaultZone: http://localhost:8761/eureka/
-#    instance:
-#      prefer-ip-address: true
+#logging:
+#  level:
+#    com.zaxxer.hikari: DEBUG
+#    com.zaxxer.hikari.HikariConfig: DEBUG
+#    com.zaxxer.hikari.HikariDataSource: DEBUG

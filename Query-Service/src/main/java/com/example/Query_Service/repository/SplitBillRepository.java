@@ -13,4 +13,6 @@ public interface SplitBillRepository
     List<SplitBill>
     findByCreatedByUserIdOrderByCreatedAtDesc(
             Long userId);
+
+    List<SplitBill> findBySplitBillIdIn(List<Long> splitBillIds);
 }

@@ -28,4 +28,6 @@ public interface SplitBillParticipantRepository
     long countBySplitBillIdAndPaymentStatus(
             Long splitBillId,
             SplitPaymentStatus status);
+
+    List<SplitBillParticipant> findBySplitBillIdIn(List<Long> splitBillIds);
 }
