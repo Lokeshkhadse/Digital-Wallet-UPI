@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: AUTH-SERVICE
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/digital_wallet
+    username: root
+    password: root
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+server:
+  port: 8081
+
+jwt:
+  secret: mysecretkeymysecretkeymysecretkey123456
+  expiration: 86400000
+  refresh-expiration: 604800000
+#
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka/
+#
+#  instance:
+#    prefer-ip-address: true
+
+#management:
+#  tracing:
+#    sampling:
+#      probability: 1.0
+#
+#  zipkin:
+#    tracing:
+#      endpoint: http://localhost:9411/api/v2/spans
+#
+#
+#logging:
+#  pattern:
+#    level: "%5p [${spring.application.name},%X{traceId},%X{spanId}]"

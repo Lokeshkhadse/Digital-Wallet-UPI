@@ -1,0 +1,47 @@
+package com.example.Action_Service.repository;
+
+import com.example.Action_Service.entity.Transaction;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+import com.example.Action_Service.enums.TransactionStatus;
+import com.example.Action_Service.enums.TransactionType;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+@Repository
+public interface TransactionRepository extends JpaRepository<Transaction,Long> {
+    Optional<Transaction> findByTransactionRefNo(String refNo);
+
+    @Query("""
+        SELECT COALESCE(SUM(t.amount),0)
+        FROM Transaction t
+        WHERE t.senderBankId = :senderBankId
+        AND t.transactionType = :transactionType
+        AND t.transactionStatus = :transactionStatus
+        AND t.createdAt BETWEEN :startDate AND :endDate
+       """)
+    BigDecimal sumTodayTransferAmount(
+            @Param("senderBankId") Long senderBankId,
+            @Param("transactionType") TransactionType transactionType,
+            @Param("transactionStatus") TransactionStatus transactionStatus,
+            @Param("startDate") LocalDateTime startDate,
+            @Param("endDate") LocalDateTime endDate
+    );
+
+    //fraud detect ke liye use ho rha hai
+    @Query("""
+       SELECT COUNT(t)
+       FROM Transaction t
+       WHERE t.senderUserId = :userId
+       AND t.createdAt >= :time
+       """)
+    Long countRecentTransactions(
+            @Param("userId") Long userId,
+            @Param("time") LocalDateTime time
+    );
+}

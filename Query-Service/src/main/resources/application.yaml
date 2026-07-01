@@ -1,0 +1,63 @@
+
+server:
+  port: 8084
+
+spring:
+  application:
+    name: QUERY-SERVICE
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/digital_wallet
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+    hikari:
+
+      pool-name: QueryServicePool
+
+      minimum-idle: 5
+
+      maximum-pool-size: 20
+
+      idle-timeout: 300000
+
+      max-lifetime: 1800000
+
+      connection-timeout: 30000
+
+      validation-timeout: 5000
+
+      leak-detection-threshold: 10000
+
+      auto-commit: true
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+    show-sql: true
+
+    properties:
+      hibernate:
+        format_sql: true
+#
+#logging:
+#  level:
+#    com.zaxxer.hikari: DEBUG
+#    com.zaxxer.hikari.HikariConfig: DEBUG
+#    com.zaxxer.hikari.HikariDataSource: DEBUG
+
+#management:
+#  tracing:
+#    sampling:
+#      probability: 1.0
+#
+#  zipkin:
+#    tracing:
+#      endpoint: http://localhost:9411/api/v2/spans
+#
+#
+#logging:
+#  pattern:
+#    level: "%5p [${spring.application.name},%X{traceId},%X{spanId}]"

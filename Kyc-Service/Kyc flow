@@ -1,0 +1,268 @@
+KYC Flow
+Step 1 - Start KYC
+
+API
+
+POST /kyc/start
+
+Request
+
+{
+   "userId": 1
+}
+
+DB
+
+kyc_details
+
+id=1
+user_id=1
+status=PENDING
+Step 2 - Upload PAN
+
+API
+
+POST /kyc/upload/pan
+
+Flow
+
+File
+ ↓
+OCR
+ ↓
+Parse PAN Details
+ ↓
+Save kyc_document
+
+DB
+
+kyc_document
+
+document_type=PAN
+name=Lokesh
+dob=01-01-2000
+document_number=ABCDE1234F
+
+Status becomes
+
+DOCUMENT_UPLOADED
+Step 3 - Upload Aadhaar
+
+API
+
+POST /kyc/upload/aadhaar
+
+Flow
+
+File
+ ↓
+OCR
+ ↓
+Parse Aadhaar
+ ↓
+Save kyc_document
+
+DB
+
+kyc_document
+
+document_type=AADHAAR
+name=Lokesh
+dob=01-01-2000
+document_number=123456789012
+
+Status remains
+
+DOCUMENT_UPLOADED
+Step 4 - Verify Documents
+
+API
+
+POST /kyc/verify/{userId}
+
+Flow
+
+Auth Service User
+      ↓
+Compare User vs PAN
+      ↓
+Compare User vs Aadhaar
+      ↓
+Compare PAN vs Aadhaar
+
+Checks
+
+Name Similarity
+DOB Match
+Success Case
+panSimilarity >= 90
+
+aadhaarSimilarity >= 90
+
+documentSimilarity >= 90
+
+all DOB matched
+
+Status
+
+DOCUMENT_VERIFIED
+
+Response
+
+{
+   "finalStatus":"DOCUMENT_VERIFIED"
+}
+Review Case
+75-89 similarity
+
+Status
+
+UNDER_REVIEW
+Failure Case
+Below threshold
+
+Status
+
+REJECTED
+
+Step 5 - Upload Voice(user .wav mai audio dega frontend se , backend mai voh multipart ki tarah lega,
+fir audio ko base64 mai convert karega , fir voh pass kakre temporary wav file banata and
+(vosk ) ko dega so usko vosk nlp mai convert karega [vosk know audio and wav format only]
+
+API
+
+POST /kyc/voice/upload
+
+Allowed only when
+
+KycStatus.DOCUMENT_VERIFIED
+
+otherwise
+
+throw new KycException(
+    "Document verification pending"
+);
+
+Flow
+
+Voice File
+    ↓
+Base64
+    ↓
+WAV
+    ↓
+Speech To Text
+    ↓
+Voice Parser
+
+Extract
+
+Name
+DOB
+PAN
+AADHAAR
+
+Save
+
+kyc_voice_verification
+
+Status
+
+VOICE_PENDING
+Step 6 - Verify Voice
+
+API
+
+POST /kyc/voice/verify/{userId}
+
+Allowed only when
+
+KycStatus.VOICE_PENDING
+
+Good check already added:
+
+if (kycDetails.getStatus()
+        != KycStatus.VOICE_PENDING) {
+
+    throw new KycException(
+            "Voice upload pending"
+    );
+}
+
+Flow
+
+PAN Document
+      ↓
+AADHAAR Document
+      ↓
+Voice Extracted Data
+      ↓
+Comparison
+
+Checks
+
+Name Similarity
+
+DOB Match
+
+PAN Match
+
+AADHAAR Match
+Final Approval
+
+Condition
+
+nameSimilarity >= 90
+&& dobMatched
+&& panMatched
+&& aadhaarMatched
+
+Result
+
+voice.setVerificationStatus(
+        "VOICE_VERIFIED");
+
+kycDetails.setStatus(
+        KycStatus.APPROVED);
+
+Final Status
+
+APPROVED
+
+This is your final successful KYC.
+
+Final Status Journey
+PENDING
+   ↓
+DOCUMENT_UPLOADED
+   ↓
+DOCUMENT_VERIFIED
+   ↓
+VOICE_PENDING
+   ↓
+APPROVED
+
+Failure path
+
+PENDING
+   ↓
+DOCUMENT_UPLOADED
+   ↓
+REJECTED
+
+or
+
+DOCUMENT_VERIFIED
+   ↓
+VOICE_PENDING
+   ↓
+REJECTED
+
+
+
+
+//ISSUES FACING
+
+1. ocr not reading properly pan and aadhaar card
+2.extracted name , ocr text and extracted dob is not setting in kyc_doc
+3.in upload void pan and dob not coming properly

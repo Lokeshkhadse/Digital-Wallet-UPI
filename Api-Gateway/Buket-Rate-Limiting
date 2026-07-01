@@ -1,0 +1,491 @@
+
+     Hamara final design
+     1 User (email from JWT) = 1 Bucket
+     20 requests per minute
+     Saari protected APIs ke liye same bucket
+     /action/**
+     /query/**
+     /ledger/**
+     /notification/**
+     /kyc/**
+     Public APIs
+     /auth/login
+     /auth/register
+     /auth/refresh
+     IP based rate limit (same 20/min)
+
+     Matlab:
+
+     User : lokesh@gmail.com
+
+     Bucket
+     20 Tokens
+     ────────────
+
+     GET /action/1        -> 19
+     GET /query/2         -> 18
+     POST /action/abc     -> 17
+     GET /ledger/1        -> 16
+
+     1 minute complete hote hi
+
+     Bucket = 20 again
+
+     Yehi strategy production mein bahut companies use karti hain.
+
+
+
+
+
+
+
+
+
+
+
+
+                Client
+                   │
+                   ▼
+          RateLimitFilter
+                   │
+      ┌────────────┴────────────┐
+      │                         │
+ Public API              Protected API
+      │                         │
+      ▼                         ▼
+  Client IP               JWT Email
+      │                         │
+      ▼                         ▼
+   Bucket4j                 Bucket4j
+      │                         │
+      ▼                         ▼
+ Token Available?         Token Available?
+      │                         │
+   Yes      No              Yes      No
+    │        │               │        │
+    ▼        ▼               ▼        ▼
+ Continue   429           Continue   429
+                │
+                ▼
+         JwtGlobalFilter
+                │
+                ▼
+        Route to Service
+
+
+
+
+
+        Current Flow (Without Rate Limiting)
+
+        Right now your gateway works like this:
+
+        Client
+           │
+           ▼
+        API Gateway
+           │
+           ▼
+        JwtGlobalFilter
+           │
+           ▼
+        Validate JWT
+           │
+           ▼
+        Forward Request
+           │
+           ▼
+        Action Service / Query Service
+
+        Suppose a malicious user sends 10,000 requests per second.
+
+        Your gateway will:
+
+        Read the Authorization header
+        Parse the JWT
+        Verify the signature
+        Extract claims
+        Add X-USER
+        Add X-ROLES
+        Forward the request
+
+        All 10,000 times.
+
+        That wastes CPU before you've even decided whether the request should be allowed.
+
+        Production Flow
+
+        Instead, production systems do this:
+
+        Client
+           │
+           ▼
+        RateLimitFilter
+
+        The very first question becomes:
+
+        "Should I even allow this request?"
+
+        If the answer is No, the request is rejected immediately.
+
+        The JWT is never parsed.
+
+        The microservice is never called.
+
+        The database is never touched.
+
+        Example 1 — Login API
+
+        A client sends:
+
+        POST /auth/login
+
+        Since this is a public API:
+
+        No JWT
+
+        ↓
+
+        No Email
+
+        ↓
+
+        Use Client IP
+
+        Example:
+
+        192.168.1.20
+
+        The gateway checks:
+
+        Bucket of
+
+        192.168.1.20
+
+        Suppose the bucket has:
+
+        5 Tokens
+
+        Each request consumes one token.
+
+        First request
+        5
+
+        ↓
+
+        4
+
+        Allowed.
+
+        Second request
+
+        4
+
+        ↓
+
+        3
+
+        Allowed.
+
+        Third
+
+        3
+
+        ↓
+
+        2
+
+        Allowed.
+
+        Fourth
+
+        2
+
+        ↓
+
+        1
+
+        Allowed.
+
+        Fifth
+
+        1
+
+        ↓
+
+        0
+
+        Allowed.
+
+        Sixth request
+
+        Bucket:
+
+        0
+
+        Now the filter immediately returns:
+
+        429 Too Many Requests
+
+        The login controller is never reached.
+
+        Why IP?
+
+        At login there is no JWT yet.
+
+        So we don't know who the user is.
+
+        The only identity available is:
+
+        Client IP
+        Example 2 — Transfer Money
+
+        Now the user has logged in.
+
+        Request:
+
+        POST /action/transfer
+
+        This request already contains:
+
+        Authorization:
+
+        Bearer xxxxx
+
+        Your JWT filter will later extract:
+
+        X-USER
+
+        =
+
+        lokesh@gmail.com
+
+        For rate limiting, we can extract the same email directly from the JWT before forwarding the request.
+
+        Then:
+
+        Bucket
+
+        ↓
+
+        lokesh@gmail.com
+
+        Suppose:
+
+        20 Tokens
+
+        Every transfer consumes one token.
+
+        20
+
+        ↓
+
+        19
+
+        ↓
+
+        18
+
+        ↓
+
+        17
+
+        Everything is allowed until the bucket is empty.
+
+        Suppose the user sends:
+
+        50 Transfers
+
+        The bucket reaches:
+
+        0
+
+        The remaining requests receive:
+
+        HTTP 429
+
+        No service call is made.
+
+        Why Email?
+
+        Because your JWT contains:
+
+        Subject
+
+        ↓
+
+        Email
+
+        That's the identity you currently use.
+
+        Later, if you switch to user IDs in the JWT, only the key changes:
+
+        Email
+
+        ↓
+
+        UserId
+
+        The rest of the implementation remains the same.
+
+        What is a Bucket?
+
+        Think of a bucket as a wallet containing request tokens.
+
+        Example:
+
+        Bucket
+
+        20 Tokens
+
+        Each request spends one token.
+
+        20
+
+        ↓
+
+        19
+
+        ↓
+
+        18
+
+        ↓
+
+        17
+
+        When the bucket becomes empty:
+
+        0
+
+        The gateway blocks further requests.
+
+        How do tokens return?
+
+        This is the key feature of the Token Bucket algorithm.
+
+        Suppose your configuration is:
+
+        Capacity = 20
+
+        Refill = 20/minute
+
+        At 12:00:
+
+        20
+
+        The user sends 20 requests.
+
+        20
+
+        ↓
+
+        0
+
+        Now every new request gets:
+
+        429
+
+        After one minute:
+
+        0
+
+        ↓
+
+        20
+
+        The bucket is automatically refilled, and requests are allowed again.
+
+        Where is this bucket stored?
+
+        Initially, in memory inside the gateway.
+
+        Conceptually:
+
+        ConcurrentHashMap
+
+        Key
+
+        ↓
+
+        lokesh@gmail.com
+
+        Value
+
+        ↓
+
+        Bucket
+
+        Another user:
+
+        amit@gmail.com
+
+        ↓
+
+        Another Bucket
+
+        Each authenticated user has an independent bucket.
+
+        For public endpoints:
+
+        ConcurrentHashMap
+
+        ↓
+
+        192.168.1.10
+
+        ↓
+
+        Bucket
+
+        Each client IP gets its own bucket.
+
+        Why place RateLimitFilter before JwtGlobalFilter?
+
+        Suppose an attacker sends:
+
+        100000 Requests
+        Current flow
+        100000
+
+        ↓
+
+        JWT Parsing
+
+        ↓
+
+        JWT Signature Verification
+
+        ↓
+
+        Claims Extraction
+
+        ↓
+
+        Routing
+
+        The gateway spends CPU on every request before rejecting anything.
+
+        New flow
+        100000
+
+        ↓
+
+        RateLimitFilter
+
+        ↓
+
+        Allowed?
+
+        ↓
+
+        NO
+
+        ↓
+
+        429
+
+        Only requests that pass the rate limit continue to JWT validation.
+
+        This protects the gateway itself from excessive work.

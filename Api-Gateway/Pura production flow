@@ -1,0 +1,41 @@
+Client
+   │
+   ▼
+API Gateway (8085)
+   │
+   ▼
+RateLimitFilter
+   │
+   ├── JWT Parse
+   ├── Email Extract
+   ├── Bucket Check
+   └── Token Consume
+   │
+   ▼
+JwtGlobalFilter
+   │
+   ├── Read Claims
+   ├── Add X-USER
+   └── Add X-ROLES
+   │
+   ▼
+application.yml Route Match
+   │
+   ▼
+Action Service (8082)
+   │
+Controller
+   │
+Service
+   │
+Repository
+   │
+MySQL
+   │
+Response
+   │
+   ▼
+Gateway
+   │
+   ▼
+Client

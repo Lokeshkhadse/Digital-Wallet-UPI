@@ -1,0 +1,220 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: API-GATEWAY
+
+  cloud:
+    gateway:
+      observability:
+        enabled: true # 🌟 ट्रेसिंग और Zipkin को Reactive Gateway के साथ जोड़ने के लिए ज़रूरी है
+
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:5173"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - PATCH
+              - OPTIONS
+            allowedHeaders:
+              - "*"
+            exposedHeaders:
+              - Authorization
+            allowCredentials: true
+            maxAge: 3600
+
+      routes:
+        - id: auth-service
+          uri: http://localhost:8081
+          predicates:
+            - Path=/auth/**
+
+        - id: action-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/action/**
+
+        - id: query-service
+          uri: http://localhost:8084
+          predicates:
+            - Path=/query/**
+
+        - id: ledger-service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/ledger/**
+
+        - id: notification-service
+          uri: http://localhost:8086
+          predicates:
+            - Path=/notification/**
+
+        - id: kyc-service
+          uri: http://localhost:8087
+          predicates:
+            - Path=/kyc/**
+
+# Eureka Configuration (Commented out)
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka/
+#  instance:
+#    prefer-ip-address: true
+
+jwt:
+  secret: mysecretkeymysecretkeymysecretkey123456
+  expiration: 86400000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+#  tracing:
+#    sampling:
+#      probability: 1.0
+#  zipkin:
+#    tracing:
+#      endpoint: http://localhost:9411/api/v2/spans
+#
+#logging:
+#  pattern:
+#    level: "%5p [${spring.application.name},%X{traceId},%X{spanId}]"
+
+
+
+
+#server:
+#  port: 8085
+#
+#spring:
+#  application:
+#    name: API-GATEWAY
+#
+#  cloud:
+#    gateway:
+#
+#      # These tell the API Gateway how long to wait when calling your services.
+##      httpclient:
+##
+##        # connect-timeout: how long the gateway waits to "reach the service" (open a connection)
+##        # If the service is down or not reachable, it will stop trying after 5 seconds.
+##        connect-timeout: 5000        # 5000 milliseconds = 5 seconds
+##
+##        # response-timeout: how long the gateway waits for the first response from the service
+##        # Even if the connection is established, if the service takes too long, the gateway gives up after 10 seconds.
+##        response-timeout: 10s        # 10 seconds
+#
+#      routes:
+#
+#        - id: auth-service
+#          uri: lb://AUTH-SERVICE
+#          predicates:
+#            - Path=/auth/**
+##          filters:
+##            - name: CircuitBreaker
+##              args:
+##                name: authCircuitBreaker
+##                fallbackUri: forward:/fallback/auth
+#
+#        - id: action-service
+#          uri: lb://ACTION-SERVICE
+#          predicates:
+#            - Path=/action/**
+##          filters:
+##            - name: CircuitBreaker
+##              args:
+##                name: actionCircuitBreaker
+##                fallbackUri: forward:/fallback/action
+#
+#        - id: query-service
+#          uri: lb://QUERY-SERVICE
+#          predicates:
+#            - Path=/query/**
+##          filters:
+##            - name: CircuitBreaker
+##              args:
+##                name: queryCircuitBreaker
+##                fallbackUri: forward:/fallback/query
+#
+#        - id: ledger-service
+#          uri: lb://LEDGER-SERVICE
+#          predicates:
+#            - Path=/ledger/**
+##          filters:
+##            - name: CircuitBreaker
+##              args:
+##                name: ledgerCircuitBreaker
+##                fallbackUri: forward:/fallback/ledger
+#
+#
+##      default-filters:
+##        - name: Retry
+##          args:
+##            retries: 2
+##            statuses:
+##              - BAD_GATEWAY
+##              - SERVICE_UNAVAILABLE
+##              - GATEWAY_TIMEOUT
+##            methods:
+##              - GET
+#
+#
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka/
+#
+#  instance:
+#    prefer-ip-address: true
+#
+#jwt:
+#  secret: mysecretkeymysecretkeymysecretkey123456
+#  expiration: 86400000
+#
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"
+#
+##resilience4j:
+##  circuitbreaker:
+##    instances:
+##
+##      authCircuitBreaker:
+##        slidingWindowSize: 10
+##        minimumNumberOfCalls: 5
+##        failureRateThreshold: 50
+##        waitDurationInOpenState: 10s
+##
+##      actionCircuitBreaker:
+##        slidingWindowSize: 10
+##        minimumNumberOfCalls: 5
+##        failureRateThreshold: 50
+##        waitDurationInOpenState: 10s
+##
+##      queryCircuitBreaker:
+##        slidingWindowSize: 10
+##        minimumNumberOfCalls: 5
+##        failureRateThreshold: 50
+##        waitDurationInOpenState: 10s
+##
+##      ledgerCircuitBreaker:
+##        slidingWindowSize: 10
+##        minimumNumberOfCalls: 5
+##        failureRateThreshold: 50
+##        waitDurationInOpenState: 10s
+#
+##logging:
+##  level:
+##    org.springframework.cloud.gateway: DEBUG
+##    org.springframework.cloud.loadbalancer: DEBUG
+##    com.netflix.discovery: DEBUG
