@@ -188,4 +188,54 @@ public class TransactionService {
                 transactions,
                 "Mini Statement Report");
     }
+
+    //AI
+
+    public Page<TransferTransactionResponse> getUserTransactionsByDateRange(
+            Long userId,
+            LocalDateTime from,
+            LocalDateTime to,
+            int page,
+            int size) {
+
+        Pageable pageable =
+                PageRequest.of(
+                        page,
+                        size,
+                        Sort.by("createdAt").descending());
+
+        return repository
+                .findBySenderUserIdOrReceiverUserIdAndCreatedAtBetween(
+                        userId,
+                        userId,
+                        from,
+                        to,
+                        pageable)
+                .map(mapper::toResponse);
+    }
+
+    public Page<TransferTransactionResponse> getUserTransactionsByAmountRange(
+            Long userId,
+            java.math.BigDecimal min,
+            java.math.BigDecimal max,
+            int page,
+            int size) {
+
+        Pageable pageable =
+                PageRequest.of(
+                        page,
+                        size,
+                        Sort.by("createdAt").descending());
+
+        return repository
+                .findBySenderUserIdOrReceiverUserIdAndAmountBetween(
+                        userId,
+                        userId,
+                        min,
+                        max,
+                        pageable)
+                .map(mapper::toResponse);
+    }
+
+
 }

@@ -15,12 +15,37 @@
 	<groupId>com.example</groupId>
 	<artifactId>Query-Service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Action-Service</name>
+	<name>Query-Service</name>
 
 	<properties>
 		<java.version>17</java.version>
 		<spring-cloud.version>2024.0.1</spring-cloud.version>  <!-- ✅ compatible -->
 	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+
+			<!-- Spring Cloud -->
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+<!--			&lt;!&ndash; Spring AI &ndash;&gt;-->
+<!--			<dependency>-->
+<!--				<groupId>org.springframework.ai</groupId>-->
+<!--				<artifactId>spring-ai-bom</artifactId>-->
+<!--				<version>${spring-ai.version}</version>-->
+<!--				<type>pom</type>-->
+<!--				<scope>import</scope>-->
+<!--			</dependency>-->
+
+		</dependencies>
+	</dependencyManagement>
+
 
 	<dependencies>
 
@@ -113,20 +138,15 @@
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 
+		<!-- Source: https://mvnrepository.com/artifact/org.springframework.ai/spring-ai-starter-model-google-genai -->
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-starter-model-google-genai</artifactId>
+			<version>1.1.7</version>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 
-	<!-- SPRING CLOUD VERSION MANAGEMENT -->
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>${spring-cloud.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
 
 	<build>
 		<plugins>

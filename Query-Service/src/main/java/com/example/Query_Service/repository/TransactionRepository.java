@@ -1,5 +1,6 @@
 package com.example.Query_Service.repository;
 
+import aj.org.objectweb.asm.commons.Remapper;
 import com.example.Query_Service.entity.Transaction;
 import com.example.Query_Service.enums.TransactionStatus;
 import com.example.Query_Service.enums.TransactionType;
@@ -94,23 +95,41 @@ public interface TransactionRepository extends JpaRepository<Transaction,Long> {
             Long receiverBankId);
 
     @Query("""
-           SELECT COALESCE(SUM(t.amount),0)
-           FROM Transaction t
-           WHERE t.receiverBankId = :bankId
-         """)
+              SELECT COALESCE(SUM(t.amount),0)
+              FROM Transaction t
+              WHERE t.receiverBankId = :bankId
+            """)
     BigDecimal getTotalCreditByBankId(
             @Param("bankId")
             Long bankId);
 
     @Query("""
-            SELECT COALESCE(SUM(t.amount),0)
-            FROM Transaction t
-           WHERE t.senderBankId = :bankId
-          """)
+              SELECT COALESCE(SUM(t.amount),0)
+              FROM Transaction t
+             WHERE t.senderBankId = :bankId
+            """)
     BigDecimal getTotalDebitByBankId(
             @Param("bankId")
             Long bankId);
 
+
+
+
+    //AI
+
+    Page<Transaction> findBySenderUserIdOrReceiverUserIdAndAmountBetween(
+            Long senderUserId,
+            Long receiverUserId,
+            BigDecimal min,
+            BigDecimal max,
+            Pageable pageable);
+
+    Page<Transaction> findBySenderUserIdOrReceiverUserIdAndCreatedAtBetween(
+            Long senderUserId,
+            Long receiverUserId,
+            LocalDateTime from,
+            LocalDateTime to,
+            Pageable pageable);
 
 
 }

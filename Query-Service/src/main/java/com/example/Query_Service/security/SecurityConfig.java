@@ -1,3 +1,4 @@
+
 package com.example.Query_Service.security;
 
 import org.springframework.context.annotation.Bean;
@@ -18,6 +19,7 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/test-gemini").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)

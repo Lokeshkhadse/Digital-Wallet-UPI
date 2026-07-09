@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/query/user-bank-balance")
@@ -20,9 +21,9 @@ public class UserBankBalanceController {
 
     @GetMapping("/getByUserId/{userId}")
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
-    public ResponseEntity<GenericResponse<UserBankBalanceResponse>> getBalanceByUserId(
+    public ResponseEntity<GenericResponse<List<UserBankBalanceResponse>>> getBalanceByUserId(
             @PathVariable Long userId) {
-        UserBankBalanceResponse response = service.getBalanceByUserId(userId);
+        List<UserBankBalanceResponse> response = service.getBalanceByUserId(userId);
 
         return ResponseEntity.ok(new GenericResponse<>("Balance retrieved successfully", response, 200));
     }
