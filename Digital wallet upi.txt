@@ -311,3 +311,6 @@ Zipkin ने शो किया ➡️ उसने डेटा सेव क
 
   ✅ Complete
 
+  26. Added Gemini  (query)
+  ✅ Complete
+
