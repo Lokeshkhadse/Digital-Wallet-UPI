@@ -18,6 +18,11 @@ spring:
 server:
   port: 8083
 
+springdoc:
+  api-docs:
+    # जब Gateway /ledger/v3/api-docs हिट करेगा, तो JSON में सारे paths /ledger/.. से शुरू होंगे
+    path: /v3/api-docs
+
 #  spring:
 #    redis:
 #      host: localhost
