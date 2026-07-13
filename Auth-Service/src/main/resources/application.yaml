@@ -19,6 +19,11 @@ jwt:
   secret: mysecretkeymysecretkeymysecretkey123456
   expiration: 86400000
   refresh-expiration: 604800000
+
+springdoc:
+  api-docs:
+    # जब Gateway /auth/v3/api-docs हिट करेगा, तो JSON में सारे paths /auth/.. से शुरू होंगे
+    path: /v3/api-docs
 #
 #eureka:
 #  client:
