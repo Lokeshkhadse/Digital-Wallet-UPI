@@ -80,11 +80,18 @@
 		</dependency>
 
 		<!-- Swagger / OpenAPI -->
+<!--		<dependency>-->
+<!--			<groupId>org.springdoc</groupId>-->
+<!--			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>-->
+<!--			<version>2.6.0</version>-->
+<!--		</dependency>-->
+		<!-- API-Gateway में यह डालिए (पुराना webmvc-ui हटाकर) -->
 		<dependency>
 			<groupId>org.springdoc</groupId>
-			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
 			<version>2.6.0</version>
 		</dependency>
+
 
 		<!-- Lombok -->
 		<dependency>

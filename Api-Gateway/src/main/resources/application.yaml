@@ -60,6 +60,24 @@ spring:
           predicates:
             - Path=/kyc/**
 
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    urls:
+      - name: 1. Auth Service
+        url: /auth/v3/api-docs
+      - name: 2. Action Service
+        url: /action/v3/api-docs
+      - name: 3. Query Service
+        url: /query/v3/api-docs
+      - name: 4. Ledger Service
+        url: /ledger/v3/api-docs
+      - name: 5. Notification Service
+        url: /notification/v3/api-docs
+      - name: 6. KYC Service
+        url: /kyc/v3/api-docs
+
 # Eureka Configuration (Commented out)
 #eureka:
 #  client:

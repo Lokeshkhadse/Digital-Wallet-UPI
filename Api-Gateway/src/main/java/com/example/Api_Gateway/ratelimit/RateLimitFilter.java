@@ -28,7 +28,10 @@ public class RateLimitFilter implements GlobalFilter, Ordered {
     private static final List<String> PUBLIC_APIS = List.of(
             "/auth/login",
             "/auth/register",
-            "/auth/refresh"
+            "/auth/refresh",
+            "/swagger-ui",           // Swagger UI के लिए
+            "/webjars",              // UI एसेट्स के लिए
+            "/v3/api-docs"           // गेटवे की अपनी डॉक्स के लिए
     );
 
     @Override
@@ -48,7 +51,7 @@ public class RateLimitFilter implements GlobalFilter, Ordered {
             Use Client IP
          */
 
-        if (PUBLIC_APIS.stream().anyMatch(path::startsWith)) {
+        if (PUBLIC_APIS.stream().anyMatch(path::startsWith) ) {
 
             String clientIp = getClientIp(exchange);
 
