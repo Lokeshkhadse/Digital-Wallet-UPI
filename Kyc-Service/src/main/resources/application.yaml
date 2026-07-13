@@ -32,6 +32,11 @@ sarvam:
   api-key: sk_josnolp3_53lQ7iTSi5cFqjUglXpnABna
   base-url: https://api.sarvam.ai/speech-to-text
 
+springdoc:
+  api-docs:
+    # जब Gateway /kyc/v3/api-docs हिट करेगा, तो JSON में सारे paths /kyc/.. से शुरू होंगे
+    path: /v3/api-docs
+
 #eureka:
 #  client:
 #    service-url:
