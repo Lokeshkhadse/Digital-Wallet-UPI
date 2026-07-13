@@ -25,6 +25,11 @@ spring:
           starttls:
             enable: true
 
+springdoc:
+  api-docs:
+    # जब Gateway /notification/v3/api-docs हिट करेगा, तो JSON में सारे paths /notification/.. से शुरू होंगे
+    path: /v3/api-docs
+
 #eureka:
 #  client:
 #    service-url:
