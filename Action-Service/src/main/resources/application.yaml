@@ -43,6 +43,11 @@ spring:
     username: guest
     password: guest
 
+springdoc:
+  api-docs:
+    # जब Gateway /action/v3/api-docs हिट करेगा, तो JSON में सारे paths /action/.. से शुरू होंगे
+    path: /v3/api-docs
+
 #management:
 #  tracing:
 #    sampling:
