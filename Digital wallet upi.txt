@@ -1,317 +1,603 @@
-1. Authentication Service:-
+================================================================================
+                     DIGITAL WALLET UPI SYSTEM (MICROSERVICES)
+================================================================================
 
+1. Authentication Service
+------------------------------------------------------------
 Features
-User Registration
-User Login
-JWT Token Generation
-JWT Validation
-Spring Security
-Role Based Authorization
+- User Registration
+- User Login
+- JWT Token Generation
+- JWT Token Validation
+- Spring Security
+- Role-Based Authorization
+
 Roles
-ADMIN
-USER
-APIs
-Register User
-Login User
-Get User By Id
-Get All Users
-Update User
-Delete User
+- ADMIN
+- USER
 
-2. Bank Management Service:-
-Features
-User bank accounts manage kar sakta hai.
 APIs
-Add Bank Account
-Delete Bank Account
-Get Bank Details
-Get Bank By User
+- Register User
+- Login User
+- Get User By Id
+- Get All Users
+- Update User
+- Delete User
+
+Status
+✅ Complete
+
+
+================================================================================
+
+2. Bank Management Service
+------------------------------------------------------------
+Features
+- User can manage multiple bank accounts.
+
+APIs
+- Add Bank Account
+- Delete Bank Account
+- Get Bank Details
+- Get Banks By User
+
 Validations
-Duplicate Account Number Check
-Duplicate UPI ID Check
-User Existence Check
+- Duplicate Account Number Check
+- Duplicate UPI ID Check
+- User Existence Check
 
-3. User Bank Balance Service:-
+Status
+✅ Complete
+
+
+================================================================================
+
+3. User Bank Balance Service
+------------------------------------------------------------
 Features
+- Separate balance maintained for every linked bank account.
 
-Har bank account ka separate balance maintain.
+Example
 
-APIs
-Create Balance
-Update Balance
-Delete Balance
-Get Balance
-Important
-1 User
+User
  ├── HDFC Balance
  ├── SBI Balance
  └── ICICI Balance
 
-Separate balance per bank account.
+APIs
+- Create Balance
+- Update Balance
+- Delete Balance
+- Get Balance
 
-4. Deposit Module:-
-Service
-DepositService
-Features
-Money Deposit
-Balance Increase
-Transaction Entry Creation
-Email Notification
 Status
-
 ✅ Complete
 
-5. Withdraw Module:-
-Service
-WithdrawService
-Features
-Withdraw Amount
-Balance Deduction
-Transaction Entry
-Email Notification
-Insufficient Balance Check
-Status
 
+================================================================================
+
+4. Deposit Module
+------------------------------------------------------------
+Features
+- Deposit Money
+- Balance Increase
+- Transaction Creation
+- Email Notification
+
+Status
 ✅ Complete
 
-6. Fund Transfer Module:-
-Service
-TransferService
-Features
-Bank To Bank Transfer
-Sender Validation
-Receiver Validation
-Balance Validation
-Transaction Creation
-Ledger Creation
-Email Notifications
-Status
 
+================================================================================
+
+5. Withdraw Module
+------------------------------------------------------------
+Features
+- Withdraw Amount
+- Balance Deduction
+- Transaction Creation
+- Email Notification
+- Insufficient Balance Validation
+
+Status
 ✅ Complete
 
-7. Idempotency Protection:-
-Feature
 
-Duplicate transfer avoid.
+================================================================================
+
+6. Fund Transfer Module
+------------------------------------------------------------
+Features
+- Bank To Bank Transfer
+- Sender Validation
+- Receiver Validation
+- Balance Validation
+- Transaction Creation
+- Ledger Entry Creation
+- Email Notifications
+
+Status
+✅ Complete
+
+
+================================================================================
+
+7. Idempotency Protection
+------------------------------------------------------------
+Purpose
+- Prevent duplicate transfer requests.
 
 Example
-
-Same request 2 times hit:
 
 Transfer #1
 SUCCESS
 
 Transfer #2
 REJECTED
-Status
 
+Status
 ✅ Complete
 
-8. Ledger Module:-
-Features
 
-Every money movement stored.
+================================================================================
+
+8. Ledger Module
+------------------------------------------------------------
+Features
+- Every money movement stored.
 
 Entries
-DEBIT
-CREDIT
+- CREDIT
+- DEBIT
+
 Example
-Transfer 1000
+
+Transfer ₹1000
 
 Sender
-DEBIT 1000
+DEBIT ₹1000
 
 Receiver
-CREDIT 1000
-Status
+CREDIT ₹1000
 
+Status
 ✅ Complete
 
-9. Email Notification Module:-
-Features
 
-HTML Emails.
+================================================================================
+
+9. Email Notification Service
+------------------------------------------------------------
+Features
+- HTML Email Templates
 
 Templates
-Account Created
-Deposit Success
-Withdraw Success
-Transfer Sender
-Transfer Receiver
-Status
+- Account Created
+- Deposit Success
+- Withdraw Success
+- Transfer Sender
+- Transfer Receiver
 
+Status
 ✅ Complete
 
-10. Beneficiary Management:-
-Features
 
-Save trusted receivers.
+================================================================================
+
+10. Beneficiary Management
+------------------------------------------------------------
+Features
+- Save Trusted Beneficiaries
 
 APIs
-Add Beneficiary
-Delete Beneficiary
-Get Beneficiaries
-Validation
-No Duplicate Beneficiary
-No Self Beneficiary
-Status
+- Add Beneficiary
+- Delete Beneficiary
+- Get Beneficiaries
 
+Validations
+- No Duplicate Beneficiary
+- No Self Beneficiary
+
+Status
 ✅ Complete
 
-(Currently transfer validation commented but module ready)
 
-11. UPI PIN Module:-
+================================================================================
+
+11. UPI PIN Module
+------------------------------------------------------------
 Features
-
-Per Bank Account UPI PIN
+- Separate UPI PIN for every bank account.
 
 APIs
-Create PIN
-Change PIN
-Validate PIN
+- Create PIN
+- Change PIN
+- Validate PIN
+
 Flow
+
 Transfer
-↓
+   ↓
 Enter UPI PIN
-↓
-Validate
-↓
+   ↓
+Validate PIN
+   ↓
 Transfer Success
-Status
 
+Status
 ✅ Complete
 
-12. Transaction Query Module:-
-Query Service
+
+================================================================================
+
+12. Transaction Query Module
+------------------------------------------------------------
 APIs
-Get Transaction By Ref No
-Get Transactions By User
-Mini Statement
-By Type
-By Status
-By Date Range
-Status
+- Get Transaction By Reference Number
+- Get Transactions By User
+- Mini Statement
+- Filter By Type
+- Filter By Status
+- Filter By Date Range
 
+Status
 ✅ Complete
 
-13. PDF Statement Download:-
+
+================================================================================
+
+13. PDF Statement Download
+------------------------------------------------------------
 Features
+- Transfer PDF
+- Deposit PDF
+- Withdraw PDF
+- Dynamic Title Support
 
-Transaction report PDF
-
-Supported
-Transfer PDF
-Deposit PDF
-Withdraw PDF
-Dynamic Title Support
-Transfer Report
-Deposit Report
-Withdraw Report
 Status
-
 ✅ Complete
 
-14. Dashboard APIs:-
-Features
 
-Per User Dashboard
+================================================================================
 
-Metrics
-Total Balance
-Total Accounts
-Total Transfers
-Total Deposits
-Total Withdrawals
-Recent Transactions
-Multiple Bank Accounts Supported
+14. Dashboard APIs
+------------------------------------------------------------
+Dashboard Metrics
+- Total Balance
+- Total Accounts
+- Total Deposits
+- Total Withdrawals
+- Total Transfers
+- Recent Transactions
+
+Supports Multiple Bank Accounts
+
 Status
-
 ✅ Complete
 
-15. Daily Transfer Limit:-
+
+================================================================================
+
+15. Daily Transfer Limit
+------------------------------------------------------------
 Features
+- Separate daily transfer limit for every bank account.
 
-Per Bank Account
-
-₹3,00,000/day
 Example
-HDFC
-Limit = 3 Lakh
 
-SBI
-Limit = 3 Lakh
-
-Independent limits.
+HDFC  → ₹3,00,000/day
+SBI   → ₹3,00,000/day
 
 Status
-
 ✅ Complete
 
-16. Global Exception Handling:-
-Features
 
-Centralized error handling.
+================================================================================
+
+16. Global Exception Handling
+------------------------------------------------------------
+Centralized Exception Handling
 
 Exceptions
-UserNotFoundException
-BankNotFoundException
-ValidationException
-DuplicateResourceException
-InvalidAmountException
-InvalidBankOwnerException
-DailyLimitExceededException
-LedgerServiceUnavailableException
-AuthServiceUnavailableException
+- UserNotFoundException
+- BankNotFoundException
+- ValidationException
+- DuplicateResourceException
+- InvalidAmountException
+- InvalidBankOwnerException
+- DailyLimitExceededException
+- LedgerServiceUnavailableException
+- AuthServiceUnavailableException
+
 Status
-
-✅ Complete
-
-17. schedular payment
-Schedule a payment (one time, monthly, weekly)
-✅ Complete
-
-18 . QR 
-when bank details add then in QR table details also add
-✅ Complete
-
-19. Split bill compeleted (action and query service)
 ✅ Complete
 
 
-20. Outbox pattern 
- ✅ Complete
+================================================================================
 
-21. Kyc service
-start kyc -> uplaod pan -uplaod addhar -> verfiyckyc -> upload voice -> verfidy voice -> final status of kyc
-(for voice to text ) -> sarvam ai used
+17. Scheduled Payment Module
+------------------------------------------------------------
+Features
+- One Time Payment
+- Weekly Payment
+- Monthly Payment
 
-22. Added completable future & db connection pool
- ✅ Complete
+Implemented using Spring Scheduler.
 
- 23.Added slf4j exclude query service
-  ✅ Complete
+Status
+✅ Complete
 
- 24. Bucket4j used for rate limiting in api gateway
- 1 user - 20 request(allow for all api) refill in 1 minute
-  ✅ Complete
 
- 25. Zipkin - micrometer and opentelemetry (distributed tracing tool)
- steps:-
-cd C:\openzipkin-zipkin-bbbc014
-curl -L -o zipkin.jar https://maven.org
-java -jar zipkin.jar
-http://localhost:9411
+================================================================================
 
-1.यूज़र ने बटन दबाया ➡️ रिक्वेस्ट API-Gateway पर आई।
-2.Micrometer + OpenTelemetry एक्टिव हुए ➡️ Micrometer के कहने पर OpenTelemetry ने Trace ID (12345) और एक Span ID जनरेट की,
-और Micrometer ने टाइमर (Observation) चालू किया।
-3.OpenTelemetry ने प्रोपेगेशन (Propagation) किया ➡️ OpenTelemetry इस Trace ID (12345) को HTTP Headers (जैसे W3C Trace Context) में डालकर अपने साथ API-Gateway से KYC-Service के पास ले गया।
-4.KYC-Service में ट्रेसिंग जारी रही ➡️ KYC-Service में OpenTelemetry ने उस पुरानी Trace ID (12345) को रीड किया और एक नई Child Span ID बनाई।
-5.Micrometer ने फिर से एक्टिव होकर टाइमर मापा कि वहाँ कितना समय लगा।
-6.OpenTelemetry ने डेटा एक्सपोर्ट किया ➡️ दोनों सर्विसेज का टाइमिंग और ट्रेस डेटा समेटकर, OpenTelemetry के Zipkin Exporter ने सारा डेटा Zipkin को भेज दिया।
-7.Zipkin ने विजुअलाइज़ेशन दिखाया ➡️ Zipkin ने उस डेटा को स्टोर किया और आपके ब्राउज़र पर पूरा टाइमलाइन ग्राफ़ (Gantt Chart) बनाकर दिखा दिया।💡 मुख्य सुधार (Key Corrections)
-  ✅ Complete
+18. QR Module
+------------------------------------------------------------
+Features
+- QR details automatically created whenever a bank account is added.
+- QR details stored in QR table.
 
-  26. Added Gemini  (query)
-  ✅ Complete
+Status
+✅ Complete
 
+
+================================================================================
+
+19. Split Bill Module
+------------------------------------------------------------
+Implemented In
+- Action Service
+- Query Service
+
+Features
+- Create Split Bill
+- Accept Split Bill
+- Reject Split Bill
+- Pending Bills
+
+Status
+✅ Complete
+
+
+================================================================================
+
+20. Outbox Pattern
+------------------------------------------------------------
+Features
+- Reliable Event Publishing
+- Database & RabbitMQ Consistency
+- Prevent Message Loss
+
+Status
+✅ Complete
+
+
+================================================================================
+
+21. KYC Service
+------------------------------------------------------------
+Complete Flow
+
+Start KYC
+     ↓
+Upload PAN
+     ↓
+Upload Aadhaar
+     ↓
+Verify Documents
+     ↓
+Upload Voice
+     ↓
+Voice-to-Text (Sarvam AI)
+     ↓
+Verify Voice
+     ↓
+Final KYC Status
+
+Status
+✅ Complete
+
+
+================================================================================
+
+22. Performance Optimization
+------------------------------------------------------------
+Features
+- CompletableFuture for asynchronous processing
+- HikariCP Database Connection Pool
+
+Status
+✅ Complete
+
+
+================================================================================
+
+23. Logging
+------------------------------------------------------------
+Features
+- SLF4J Logging
+- Optimized Query Service Logging
+
+Status
+✅ Complete
+
+
+================================================================================
+
+24. API Rate Limiting
+------------------------------------------------------------
+Technology
+- Bucket4j
+
+Configuration
+- 20 Requests per User
+- Refill Every 1 Minute
+- Applied at API Gateway
+
+Status
+✅ Complete
+
+
+================================================================================
+
+25. Distributed Tracing
+------------------------------------------------------------
+Technologies
+- Micrometer
+- OpenTelemetry
+- Zipkin
+
+Flow
+
+Client
+   ↓
+API Gateway
+   ↓
+Trace ID Generated
+   ↓
+Trace Propagation
+   ↓
+Microservices
+   ↓
+Child Spans Created
+   ↓
+Zipkin Exporter
+   ↓
+Zipkin Dashboard
+
+Benefits
+- Request Timeline
+- Service Latency
+- End-to-End Request Tracking
+- Performance Monitoring
+
+Status
+✅ Complete
+
+
+================================================================================
+
+26. AI Integration
+------------------------------------------------------------
+Technology
+- Google Gemini AI
+
+Implemented In
+- Query Service
+
+Features
+- AI-powered Query Assistance
+- Intelligent Transaction Insights
+- Natural Language Responses
+
+Status
+✅ Complete
+
+
+================================================================================
+
+27. CI Pipeline
+------------------------------------------------------------
+Technology
+- GitHub Actions
+
+Features
+- Automatic Maven Build
+- Multi-Service Build
+- SonarCloud Code Analysis
+- Maven Dependency Cache
+- Automatic Execution on Push
+- Automatic Execution on Pull Request
+
+Status
+✅ Complete
+
+
+================================================================================
+
+28. Dockerization
+------------------------------------------------------------
+Features
+- Dockerfile for every Microservice
+- Docker Compose
+- MySQL Container
+- RabbitMQ Container
+- application-docker.yml Profiles
+- Docker Bridge Network
+- Health Checks
+- Containerized Deployment
+
+Status
+✅ Complete
+
+
+================================================================================
+
+TECHNOLOGY STACK
+================================================================================
+
+Backend
+--------
+- Java 17
+- Spring Boot
+- Spring Security
+- Spring Data JPA
+- Spring Cloud OpenFeign
+- Spring Scheduler
+
+Database
+---------
+- MySQL
+- HikariCP Connection Pool
+
+Messaging
+---------
+- RabbitMQ
+
+Authentication
+--------------
+- JWT
+- Spring Security
+
+Documentation
+-------------
+- SpringDoc OpenAPI (Swagger)
+
+Containerization
+----------------
+- Docker
+- Docker Compose
+
+CI/CD
+-----
+- GitHub Actions
+- SonarCloud
+
+Monitoring
+----------
+- Micrometer
+- OpenTelemetry
+- Zipkin
+
+Rate Limiting
+-------------
+- Bucket4j
+
+Artificial Intelligence
+-----------------------
+- Google Gemini AI
+- Sarvam AI (Voice-to-Text)
+
+Logging
+-------
+- SLF4J
+
+Design Patterns & Architecture
+------------------------------
+- Microservices Architecture
+- Outbox Pattern
+- Idempotency Pattern
+- Event-Driven Communication
+- REST APIs
+- Asynchronous Processing (CompletableFuture)
+
+================================================================================
