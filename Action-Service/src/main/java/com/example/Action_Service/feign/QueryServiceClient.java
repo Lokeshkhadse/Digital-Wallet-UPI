@@ -8,11 +8,22 @@ import org.springframework.web.bind.annotation.PathVariable;
 //@FeignClient(
 //        name = "QUERY-SERVICE"
 //)
-@FeignClient(name = "QUERY-SERVICE" , url = "http://localhost:8084")
+//@FeignClient(name = "QUERY-SERVICE" , url = "http://localhost:8084")
+//public interface QueryServiceClient {
+//
+//    @GetMapping("/query/qr/lookup/{upiId}")
+//    QrLookupResponse lookupQr(
+//            @PathVariable("upiId")
+//            String upiId);
+//}
+
+@FeignClient(
+        name = "QUERY-SERVICE",
+        url = "${services.query.url}"
+)
 public interface QueryServiceClient {
 
     @GetMapping("/query/qr/lookup/{upiId}")
     QrLookupResponse lookupQr(
-            @PathVariable("upiId")
-            String upiId);
+            @PathVariable String upiId);
 }

@@ -48,6 +48,16 @@ springdoc:
     # जब Gateway /action/v3/api-docs हिट करेगा, तो JSON में सारे paths /action/.. से शुरू होंगे
     path: /v3/api-docs
 
+services:
+  auth:
+    url: http://localhost:8081
+
+  ledger:
+    url: http://localhost:8083
+
+  query:
+    url: http://localhost:8084
+
 #management:
 #  tracing:
 #    sampling:

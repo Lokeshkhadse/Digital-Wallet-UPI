@@ -1,0 +1,59 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: ACTION-SERVICE
+
+  datasource:
+    url: jdbc:mysql://mysql:3306/digital_wallet
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: lokeshkhadse.eidiko@gmail.com
+    password: qptq ldun zlhl kupy
+
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  task:
+    scheduling:
+      pool:
+        size: 5
+
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+
+
+services:
+  auth:
+    url: http://auth-service:8081
+
+  ledger:
+    url: http://ledger-service:8083
+
+  query:
+    url: http://query-service:8084
