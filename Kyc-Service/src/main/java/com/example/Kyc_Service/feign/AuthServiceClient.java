@@ -10,7 +10,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 //        name = "AUTH-SERVICE"
 //       // , fallback = AuthServiceFallback.class
 //)
-@FeignClient(name = "AUTH-SERVICE", url = "http://localhost:8081")
+//@FeignClient(name = "AUTH-SERVICE", url = "http://localhost:8081")
+//public interface AuthServiceClient {
+//
+//    @GetMapping("/auth/users/{id}")
+//    UserResponseDto getUserById(@PathVariable Long id);
+//}
+
+@FeignClient(
+        name = "AUTH-SERVICE",
+        url = "${services.auth.url}"
+)
 public interface AuthServiceClient {
 
     @GetMapping("/auth/users/{id}")

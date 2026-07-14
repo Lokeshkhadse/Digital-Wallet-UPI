@@ -37,6 +37,10 @@ springdoc:
     # जब Gateway /kyc/v3/api-docs हिट करेगा, तो JSON में सारे paths /kyc/.. से शुरू होंगे
     path: /v3/api-docs
 
+services:
+  auth:
+    url: http://localhost:8081
+
 #eureka:
 #  client:
 #    service-url:
