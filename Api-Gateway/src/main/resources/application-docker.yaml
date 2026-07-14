@@ -1,0 +1,94 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: API-GATEWAY
+
+  cloud:
+    gateway:
+      observability:
+        enabled: true
+
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:5173"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - PATCH
+              - OPTIONS
+            allowedHeaders:
+              - "*"
+            exposedHeaders:
+              - Authorization
+            allowCredentials: true
+            maxAge: 3600
+
+      routes:
+        - id: auth-service
+          uri: http://auth-service:8081
+          predicates:
+            - Path=/auth/**
+
+        - id: action-service
+          uri: http://action-service:8082
+          predicates:
+            - Path=/action/**
+
+        - id: ledger-service
+          uri: http://ledger-service:8083
+          predicates:
+            - Path=/ledger/**
+
+        - id: query-service
+          uri: http://query-service:8084
+          predicates:
+            - Path=/query/**
+
+        - id: notification-service
+          uri: http://notification-service:8086
+          predicates:
+            - Path=/notification/**
+
+        - id: kyc-service
+          uri: http://kyc-service:8087
+          predicates:
+            - Path=/kyc/**
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    urls:
+      - name: 1. Auth Service
+        url: /auth/v3/api-docs
+
+      - name: 2. Action Service
+        url: /action/v3/api-docs
+
+      - name: 3. Query Service
+        url: /query/v3/api-docs
+
+      - name: 4. Ledger Service
+        url: /ledger/v3/api-docs
+
+      - name: 5. Notification Service
+        url: /notification/v3/api-docs
+
+      - name: 6. KYC Service
+        url: /kyc/v3/api-docs
+
+jwt:
+  secret: mysecretkeymysecretkeymysecretkey123456
+  expiration: 86400000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
