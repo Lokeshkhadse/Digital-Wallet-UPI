@@ -76,7 +76,7 @@ services:
       - "8084:8084"
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      Gemini_Key: AQ.Ab8RN6JPCzStr2-a6e4Gu0CUJkcnindSOFjcS8lnSQWoTfrmKw
+      Gemini_Key: ${Gemini_Key}
     depends_on:
       mysql:
         condition: service_healthy
