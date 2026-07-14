@@ -302,13 +302,14 @@ curl -L -o zipkin.jar https://maven.org
 java -jar zipkin.jar
 http://localhost:9411
 
-यूज़र ने बटन दबाया ➡️ रिक्वेस्ट API-Gateway पर आई।
-Micrometer एक्टिव हुआ ➡️ उसने एक Trace ID (12345) जनरेट की और टाइमर चालू किया।
-OpenTelemetry ने मदद की ➡️ वह उस 12345 ID को अपने साथ लेकर API-Gateway से KYC-Service के पास गया।
-Micrometer फिर एक्टिव हुआ ➡️ KYC-Service में उसने टाइमर मापा कि वहाँ कितना समय लगा।
-OpenTelemetry ने डेटा समेटा ➡️ दोनों सर्विसेज का टाइमिंग डेटा उठाया और Zipkin को भेज दिया।
-Zipkin ने शो किया ➡️ उसने डेटा सेव किया और आपके ब्राउज़र पर ग्राफ़ बनाकर दिखा दिया।
-
+1.यूज़र ने बटन दबाया ➡️ रिक्वेस्ट API-Gateway पर आई।
+2.Micrometer + OpenTelemetry एक्टिव हुए ➡️ Micrometer के कहने पर OpenTelemetry ने Trace ID (12345) और एक Span ID जनरेट की,
+और Micrometer ने टाइमर (Observation) चालू किया।
+3.OpenTelemetry ने प्रोपेगेशन (Propagation) किया ➡️ OpenTelemetry इस Trace ID (12345) को HTTP Headers (जैसे W3C Trace Context) में डालकर अपने साथ API-Gateway से KYC-Service के पास ले गया।
+4.KYC-Service में ट्रेसिंग जारी रही ➡️ KYC-Service में OpenTelemetry ने उस पुरानी Trace ID (12345) को रीड किया और एक नई Child Span ID बनाई।
+5.Micrometer ने फिर से एक्टिव होकर टाइमर मापा कि वहाँ कितना समय लगा।
+6.OpenTelemetry ने डेटा एक्सपोर्ट किया ➡️ दोनों सर्विसेज का टाइमिंग और ट्रेस डेटा समेटकर, OpenTelemetry के Zipkin Exporter ने सारा डेटा Zipkin को भेज दिया।
+7.Zipkin ने विजुअलाइज़ेशन दिखाया ➡️ Zipkin ने उस डेटा को स्टोर किया और आपके ब्राउज़र पर पूरा टाइमलाइन ग्राफ़ (Gantt Chart) बनाकर दिखा दिया।💡 मुख्य सुधार (Key Corrections)
   ✅ Complete
 
   26. Added Gemini  (query)

@@ -1,0 +1,175 @@
+services:
+
+  mysql:
+    image: mysql:8.0
+    container_name: digital-wallet-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: digital_wallet
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - wallet-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: digital-wallet-rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - wallet-network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  auth-service:
+    build:
+      context: ./Auth-Service
+      dockerfile: Dockerfile
+    container_name: auth-service
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - wallet-network
+
+  ledger-service:
+    build:
+      context: ./Ledger-Service
+      dockerfile: Dockerfile
+    container_name: ledger-service
+    restart: unless-stopped
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - wallet-network
+
+  query-service:
+    build:
+      context: ./Query-Service
+      dockerfile: Dockerfile
+    container_name: query-service
+    restart: unless-stopped
+    ports:
+      - "8084:8084"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      Gemini_Key: AQ.Ab8RN6JPCzStr2-a6e4Gu0CUJkcnindSOFjcS8lnSQWoTfrmKw
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - wallet-network
+
+  notification-service:
+    build:
+      context: ./Notification-Service
+      dockerfile: Dockerfile
+    container_name: notification-service
+    restart: unless-stopped
+    ports:
+      - "8086:8086"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - wallet-network
+
+  kyc-service:
+    build:
+      context: ./Kyc-Service
+      dockerfile: Dockerfile
+    container_name: kyc-service
+    restart: unless-stopped
+    ports:
+      - "8087:8087"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      mysql:
+        condition: service_healthy
+      auth-service:
+        condition: service_started
+    networks:
+      - wallet-network
+
+  action-service:
+    build:
+      context: ./Action-Service
+      dockerfile: Dockerfile
+    container_name: action-service
+    restart: unless-stopped
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      mysql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      auth-service:
+        condition: service_started
+      ledger-service:
+        condition: service_started
+      query-service:
+        condition: service_started
+    networks:
+      - wallet-network
+
+  api-gateway:
+    build:
+      context: ./Api-Gateway
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    restart: unless-stopped
+    ports:
+      - "8085:8085"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      auth-service:
+        condition: service_started
+      action-service:
+        condition: service_started
+      ledger-service:
+        condition: service_started
+      query-service:
+        condition: service_started
+      notification-service:
+        condition: service_started
+      kyc-service:
+        condition: service_started
+    networks:
+      - wallet-network
+
+volumes:
+  mysql-data:
+
+networks:
+  wallet-network:
+    driver: bridge
