@@ -17,21 +17,12 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        service:
-          - Auth-Service
-          - Action-Service
-          - Ledger-Service
-          - Query-Service
-          - Notification-Service
-          - Kyc-Service
-          - Api-Gateway
-
     steps:
 
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Java 17
         uses: actions/setup-java@v4
@@ -39,23 +30,51 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Cache Maven
+      - name: Cache Maven Repository
         uses: actions/cache@v4
         with:
           path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles(format('{0}/pom.xml', matrix.service)) }}
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-m2-
 
-      - name: Build ${{ matrix.service }}
-        working-directory: ${{ matrix.service }}
-        run: mvn clean verify
+      # Build every microservice
+      - name: Build Auth-Service
+        working-directory: Auth-Service
+        run: mvn clean install -DskipTests
 
-      - name: SonarCloud Scan - ${{ matrix.service }}
-        working-directory: ${{ matrix.service }}
+      - name: Build Action-Service
+        working-directory: Action-Service
+        run: mvn clean install -DskipTests
+
+      - name: Build Ledger-Service
+        working-directory: Ledger-Service
+        run: mvn clean install -DskipTests
+
+      - name: Build Query-Service
+        working-directory: Query-Service
+        run: mvn clean install -DskipTests
+
+      - name: Build Notification-Service
+        working-directory: Notification-Service
+        run: mvn clean install -DskipTests
+
+      - name: Build Kyc-Service
+        working-directory: Kyc-Service
+        run: mvn clean install -DskipTests
+
+      - name: Build Api-Gateway
+        working-directory: Api-Gateway
+        run: mvn clean install -DskipTests
+
+      # SonarCloud Analysis
+      - name: SonarCloud Scan
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          mvn sonar:sonar \
-          -Dsonar.projectKey=digital-wallet \
-          -Dsonar.organization=lokesh-khadse \
+          mvn -f Query-Service/pom.xml \
+          org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
           -Dsonar.host.url=https://sonarcloud.io \
-          -Dsonar.token=${{ secrets.SONAR_TOKEN }}
+          -Dsonar.organization=lokeshkhadse \
+          -Dsonar.projectKey=Lokeshkhadse_Digital-Wallet-UPI \
+          -Dsonar.token=${SONAR_TOKEN}

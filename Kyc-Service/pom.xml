@@ -22,6 +22,8 @@
 		<spring-cloud.version>2024.0.1</spring-cloud.version>
 		<tess4j.version>5.19.0</tess4j.version>
 		<commons-text.version>1.15.0</commons-text.version>
+
+		<sonar.organization>lokeshkhadse</sonar.organization>
 	</properties>
 
 	<dependencies>
