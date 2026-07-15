@@ -103,7 +103,7 @@ public class WithdrawService {
 
         // 4. Fetch Balance
         UserBankBalance balance =
-                balanceRepository.findByUserBankId(
+                balanceRepository.lockByUserBankId(
                                 request.getUserBankId())
                         .orElseThrow(() -> {
 
