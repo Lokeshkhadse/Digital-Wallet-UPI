@@ -1,6 +1,7 @@
 package com.example.Auth_Service.util;
 
 
+import com.example.Auth_Service.security.CustomUserDetails;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,10 +30,13 @@ public class JwtUtil {
     }
 
     public String generateToken(UserDetails userDetails) {
+        CustomUserDetails customUser = (CustomUserDetails) userDetails;
+
 
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
 //                .claim("roles", userDetails.getAuthorities())
+                .claim("id", customUser.getId())
                 .claim(
                         "roles",
                         userDetails.getAuthorities()
@@ -50,18 +54,16 @@ public class JwtUtil {
                 .compact();
     }
 
-    public String generateRefreshToken(
-            UserDetails userDetails) {
+    public String generateRefreshToken(UserDetails userDetails) {
+
+        CustomUserDetails customUser = (CustomUserDetails) userDetails;
 
         return Jwts.builder()
-                .setSubject(userDetails.getUsername())
+                .setSubject(customUser.getUsername())
+                .claim("id", customUser.getId())
                 .setIssuedAt(new Date())
-                .setExpiration(
-                        new Date(
-                                System.currentTimeMillis()
-                                        + refreshExpiration))
-                .signWith(getSignKey(),
-                        SignatureAlgorithm.HS256)
+                .setExpiration(new Date(System.currentTimeMillis() + refreshExpiration))
+                .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 

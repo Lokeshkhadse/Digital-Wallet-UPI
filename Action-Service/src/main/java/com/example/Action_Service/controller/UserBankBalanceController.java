@@ -21,7 +21,7 @@ public class UserBankBalanceController {
     private final UserBankBalanceService service;
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<GenericResponse<UserBankBalanceResponse>> createBalance(
             @Valid @RequestBody UserBankBalanceRequest request) {
         UserBankBalanceResponse response = service.createBalance(request);

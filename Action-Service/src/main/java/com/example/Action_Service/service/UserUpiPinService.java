@@ -2,10 +2,13 @@ package com.example.Action_Service.service;
 
 import com.example.Action_Service.dto.ChangePinRequest;
 import com.example.Action_Service.dto.CreatePinRequest;
+import com.example.Action_Service.entity.UserBankDetails;
 import com.example.Action_Service.entity.UserUpiPin;
+import com.example.Action_Service.exception.BankNotFoundException;
 import com.example.Action_Service.exception.DuplicateResourceException;
 import com.example.Action_Service.exception.ResourceNotFoundException;
 import com.example.Action_Service.exception.ValidationException;
+import com.example.Action_Service.repository.BankRepository;
 import com.example.Action_Service.repository.UserUpiPinRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,10 +27,15 @@ public class UserUpiPinService {
 
     private final UserUpiPinRepository pinRepository;
     private final PasswordEncoder passwordEncoder;
+    private final BankRepository bankRepository;
 
     @Transactional
     public String createPin(CreatePinRequest request) {
         log.info("UPI PIN creation initiated | UserId={} | BankId={}", request.getUserId(), request.getUserBankId());
+
+        UserBankDetails bank = bankRepository.findById(request.getUserBankId())
+                .orElseThrow(() ->
+                        new BankNotFoundException("Bank not found"));
 
         if (pinRepository.findByUserIdAndUserBankId(request.getUserId(), request.getUserBankId()).isPresent()) {
             log.warn("UPI PIN already exists | UserId={} | BankId={}", request.getUserId(), request.getUserBankId());

@@ -2,6 +2,7 @@ package com.example.Action_Service.controller;
 
 import com.example.Action_Service.dto.ChangePinRequest;
 import com.example.Action_Service.dto.CreatePinRequest;
+import com.example.Action_Service.dto.ValidatePinRequest;
 import com.example.Action_Service.service.UserUpiPinService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,20 @@ public class UserUpiPinController {
             @Valid @RequestBody ChangePinRequest request) {
 
         return ResponseEntity.ok(service.changePin(request));
+    }
+
+    @PostMapping("/validate")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<String> validatePin(
+            @Valid @RequestBody ValidatePinRequest request) {
+
+        service.validatePin(
+                request.getUserId(),
+                request.getUserBankId(),
+                request.getUpiPin()
+        );
+
+        return ResponseEntity.ok("UPI PIN validated successfully");
     }
 }
 

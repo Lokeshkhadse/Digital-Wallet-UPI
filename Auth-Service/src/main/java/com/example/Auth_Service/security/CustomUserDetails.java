@@ -15,6 +15,10 @@ public class CustomUserDetails
 
     private User user;
 
+    public Long getId() {
+        return user.getId();
+    }
+
     @Override
     public Collection<SimpleGrantedAuthority> getAuthorities() {
 

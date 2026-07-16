@@ -6,29 +6,40 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Data
-public class BankRequest {
 
-    @NotNull(message = "User ID is required")
-    @Positive(message = "User ID must be a positive number")
-    private Long userId;
+    @Data
+    public class BankRequest {
 
-    @NotBlank(message = "Bank name is required")
-    private String bankName;
+        @NotNull(message = "User ID is required")
+        @Positive(message = "User ID must be a positive number")
+        private Long userId;
 
-    @NotBlank(message = "Account number is required")
-    private String accountNumber;
+        @NotBlank(message = "Bank name is required")
+        @Size(min = 3, max = 100, message = "Bank name must be between 3 and 100 characters")
+        private String bankName;
 
-    @NotBlank(message = "IFSC code is required")
-    private String ifscCode;
+        @NotBlank(message = "Account number is required")
+        @Pattern(
+                regexp = "^[0-9]{9,18}$",
+                message = "Account number must be between 9 and 18 digits"
+        )
+        private String accountNumber;
 
-    @Pattern(
-            regexp = "^[a-zA-Z0-9.\\-_]{2,256}@[a-zA-Z]{2,64}$",
-            message = "Invalid UPI ID format (e.g. name@upi)"
-    )
-    private String upiId;
+        @NotBlank(message = "IFSC code is required")
+        @Pattern(
+                regexp = "^[A-Z]{4}0[A-Z0-9]{6}$",
+                message = "Invalid IFSC code (Example: SBIN0001234)"
+        )
+        private String ifscCode;
 
-    @NotNull(message = "Account type is required")
-    private AccountType accountType;
+        @NotBlank(message = "UPI ID is required")
+        @Pattern(
+                regexp = "^[a-zA-Z0-9._-]{2,256}@[a-zA-Z]{2,64}$",
+                message = "Invalid UPI ID (Example: lokesh@okhdfcbank)"
+        )
+        private String upiId;
 
-}
+        @NotNull(message = "Account type is required")
+        private AccountType accountType;
+    }
+
