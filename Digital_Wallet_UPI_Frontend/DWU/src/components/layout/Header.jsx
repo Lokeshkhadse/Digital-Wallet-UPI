@@ -5,18 +5,15 @@ const Header = () => {
 
   return (
     <header className="flex justify-between items-center px-4 md:px-8 py-4 bg-white/10 backdrop-blur-md border-b border-white/10">
-      <div className="flex items-center gap-2">
+      {/* Icon only – app name is in sidebar */}
+      <div className="flex items-center">
         <span className="text-3xl">💳</span>
-        <h1 className="text-xl md:text-2xl font-bold text-white">
-          <span className="text-cyan-400">Digital</span> Wallet
-        </h1>
       </div>
+
+      {/* User Name */}
       <div className="flex items-center gap-4">
-        <span className="hidden md:inline text-white/80 text-sm">
+        <span className="hidden md:inline text-white/80 text-sm font-medium">
           {user?.name || 'User'}
-        </span>
-        <span className="text-white font-semibold bg-white/10 px-3 py-1 rounded-full text-sm">
-          ₹{user?.totalBalance?.toFixed(2) || '0.00'}
         </span>
       </div>
     </header>
